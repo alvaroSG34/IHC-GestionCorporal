@@ -28,6 +28,10 @@ Registrar una evaluación corporal de un paciente y almacenarlos para poder cons
 **Alcance**
 ¿Que parte pequeña abordaremos primero?
 
-Registrar Paciente
-Realizar Medicion
-Visualizar Resultados
+Registrar Paciente,
+Realizar Medicion,
+Visualizar Resultados.
+
+**Hipotesis**
+
+Creemos que el nutricionista necesita una facilidad de registrar medidas corporales porque le toma mucho tiempo en realizar y buscar las medidas corporales de pacientes. Si diseñamos un sistema que permita registrar y mostrar la evolucion corporal de un paciente, esperamos que el nutricionista aumente su productividad en sus consultas.
