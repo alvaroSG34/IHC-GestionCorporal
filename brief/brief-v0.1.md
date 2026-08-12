@@ -1,31 +1,31 @@
 #Brief v0.1
 
-*Problema*
+**Problema**
 ¿Que dificultad queremos comprender?
 
 Los profesionales registran las mediciones corporales, calculos y organizan resultados de manera manual.
 
-*Contexto*
+**Contexto**
 ¿Donde y cuando Ocurre?
 
 Durante las consultas o evaluaciones físicas realizadas por nutricionistas, entrenadores y otros profesionales
 
-*Idea Inicial*
+**Idea Inicial**
 ¿Que solucion imaginamos por ahora?
 
 Que el profesional pueda registrar pacientes , medidas y tambien visualizar como evoluaciona el paciente entre cada consulta.
 
-*Usuario*
+**Usuario**
 ¿Quien vive esa dificultad?
 
 Nutricionistas, entrenadores y profesionales que realizan evaluaciones de composicion corporal
 
-*Tarea*
+**Tarea**
 ¿Que intenta hacer el usuario?
 
 Registrar una evaluación corporal de un paciente y almacenarlos para poder consultarlos y compararlos despues.
 
-*Alcance*
+**Alcance**
 ¿Que parte pequeña abordaremos primero?
 
 Registrar Paciente
