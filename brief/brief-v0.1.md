@@ -35,7 +35,7 @@ Un simple formulario donde el profesional pueda registrar el pacientes y ademas 
 Creemos que el nutricionista necesita una nuevo forma de registrar medidas corporales porque actualmente le toma mucho tiempo en realizar y buscar las medidas corporales de pacientes. Si diseñamos un sistema que permita registrar y mostrar la evolucion corporal de un paciente, esperamos que el profesional aumente su productividad en sus consultas.
 
 
-**-----------------------------------------------------------------**
+**---------------------------------------------------------------------------------------------------------------------------**
 **Proyecto Opcion 2** 
 **Problema**
 ¿Que dificultad queremos comprender?
