@@ -11,14 +11,10 @@ Software como servicio para la evaluación y seguimiento de la composición corp
 Proyecto propio - SIN IA
 
 **Problema Inicial**
-Gestion manual y dispersa de las evaluaciones de composición corporal de pacientes.
+Cada vez cuando ocurre una consulta nutricional, el profesional primero debe buscar las evaluaciones anteriores que tuvo el paciente y luego registrar las nuevas medidas corporales. Ademas el paciente no tiene alguna forma de poder visualizar la evaluacion realizada por el profesional.
 
-**Usuario Identificados**
+**Usuarios Identificados**
 
-*Nutricionista*: Registra Evaluaciones, evolucion del paciente y modifica el plan nutricional segun los resultados
+*Profesional en area de nutricion o similares*: Registra Evaluaciones, evolucion del paciente y modifica el plan nutricional segun los resultados
 
-*Entrenador*: Se centra en enfoque Fisico y de rendimiento para evaluar el progreso del entrenamiento y ajustar objetivo Fisico
-
-
-
-
+*Paciente*: consulta sus resultados, progreso y revisa las evaluaciones dada por el profesional.

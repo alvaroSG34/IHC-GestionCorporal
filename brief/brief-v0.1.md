@@ -3,40 +3,40 @@
 **Problema**
 ¿Que dificultad queremos comprender?
 
-Los profesionales registran las mediciones corporales, calculos y organizan resultados de manera manual.
+Cada vez cuando ocurre una consulta nutricional, el profesional primero debe buscar las evaluaciones anteriores que tuvo el paciente y luego registrar las nuevas medidas corporales. Ademas el paciente no tiene alguna forma de poder visualizar el avance que tiene en cualquier momento. 
 
 **Contexto**
 ¿Donde y cuando Ocurre?
 
-Durante las consultas o evaluaciones físicas realizadas por nutricionistas, entrenadores y otros profesionales
+Durante las consultas o evaluaciones físicas realizadas por nutricionistas, entrenadores y otros profesionales con ramas afines.
 
 **Idea Inicial**
 ¿Que solucion imaginamos por ahora?
 
-Que el profesional pueda registrar pacientes , medidas y tambien visualizar como evoluaciona el paciente entre cada consulta.
+Que el profesional pueda registrar pacientes , medidas y adicionalmente que el paciente pueda visualizar como evoluaciona su composicion corporal entre cada consulta.
 
 **Usuario**
 ¿Quien vive esa dificultad?
 
-Nutricionistas, entrenadores y profesionales que realizan evaluaciones de composicion corporal
+Profesionales en area de nutricion o similares y pacientes que desean visualizar su composicion corporal.
 
 **Tarea**
 ¿Que intenta hacer el usuario?
 
-Registrar una evaluación corporal de un paciente y almacenarlos para poder consultarlos y compararlos despues.
+Buscar y registrar evaluaciones corporales de pacientes para que luego pueda ser visualizados porteriormente por cualquiera.
 
 **Alcance**
 ¿Que parte pequeña abordaremos primero?
 
-Registrar Paciente,
-Realizar Medicion,
-Visualizar Resultados.
+Un simple formulario donde el profesional pueda registrar el pacientes y ademas un listado de pacientes donde para cada paciente se le pueda registrar o buscar una evaluacion.
 
 **Hipotesis**
 
-Creemos que el nutricionista necesita una facilidad de registrar medidas corporales porque le toma mucho tiempo en realizar y buscar las medidas corporales de pacientes. Si diseñamos un sistema que permita registrar y mostrar la evolucion corporal de un paciente, esperamos que el nutricionista aumente su productividad en sus consultas.
+Creemos que el nutricionista necesita una nuevo forma de registrar medidas corporales porque actualmente le toma mucho tiempo en realizar y buscar las medidas corporales de pacientes. Si diseñamos un sistema que permita registrar y mostrar la evolucion corporal de un paciente, esperamos que el profesional aumente su productividad en sus consultas.
 
-**Opcion 2** 
+
+
+**Proyecto Opcion 2** 
 **Problema**
 ¿Que dificultad queremos comprender?
 
