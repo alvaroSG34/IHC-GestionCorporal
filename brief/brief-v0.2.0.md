@@ -16,6 +16,7 @@ Persona profesional de nutricion que registra manualmente las medidas corporales
 **Insight**
 
 Antes de poder detectar cambios reales en las medidas del paciente, necesitamos primero organizar y centralizar donde se guardan estos datos.
+
 **Hipotesis revisada**
 
 Nuestra hipotesis inicial no era correcta ya que con la investigacion que realizamos nos dimos cuenta que el problema raiz no era la dificultad en registrar de medidas corporales sino en primero encontrar el historial clinico de un paciente. 
