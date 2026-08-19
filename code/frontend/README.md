@@ -1,1 +1,0 @@
-# Inicio del proyecto del Frontend IHC SIN IA
