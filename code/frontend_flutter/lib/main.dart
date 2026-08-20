@@ -1,6 +1,4 @@
 import 'package:flutter/material.dart';
-import 'package:velocity_x/velocity_x.dart';
-
 import 'views/home_view/home_view.dart';
 
 void main() {
