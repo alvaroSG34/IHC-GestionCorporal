@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../models/paciente.dart';
 import '../../services/paciente_service.dart';
 import 'paciente_create_view.dart';
+import '../evaluaciones/evaluacion.view.dart';
 
 class PacienteView extends StatefulWidget {
   const PacienteView({super.key});
@@ -57,13 +58,22 @@ class _PacienteViewState extends State<PacienteView> {
               final paciente = pacientes[i];
 
               return ListTile(
-                title: Text(paciente.nombre),
+                title: Text('ID: ${paciente.id}'),
                 subtitle: Text(
-                  'ID: ${paciente.id}\n'
+                  'Nombre: ${paciente.nombre}\n'
                   'Sexo: ${paciente.sexo}\n'
                   'Nacimiento: ${paciente.fechaNacimiento}\n'
                   'Teléfono: ${paciente.telefono ?? 'Sin fono'}',
                 ),
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) =>
+                          EvaluacionView(pacienteId: paciente.id),
+                    ),
+                  );
+                },
               );
             },
           );

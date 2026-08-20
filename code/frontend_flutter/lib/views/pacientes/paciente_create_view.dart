@@ -29,7 +29,7 @@ class _PacienteCreateViewState extends State<PacienteCreateView> {
     if (fechaNacimiento == null) {
       ScaffoldMessenger.of(
         context,
-      ).showSnackBar(const SnackBar(content: Text('Fecha inválida')));
+      ).showSnackBar(const SnackBar(content: Text('fecha invalida')));
       return;
     }
 
