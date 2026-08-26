@@ -1,14 +1,12 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-
+import '../consts/api_constants.dart';
 import '../models/paciente.dart';
 
 class PacienteService {
-  static const String _baseUrl = 'https://ihc-gestioncorporal.onrender.com';
-
   Future<List<Paciente>> getPacientes() async {
     final response = await http.get(
-      Uri.parse('$_baseUrl/pacientes/'),
+      Uri.parse('$baseUrl/pacientes/'),
       headers: {'Content-Type': 'application/json'},
     );
 
@@ -30,7 +28,7 @@ class PacienteService {
     String? telefono,
   }) async {
     final response = await http.post(
-      Uri.parse('$_baseUrl/pacientes/'),
+      Uri.parse('$baseUrl/pacientes/'),
       headers: {'Content-Type': 'application/json'},
       body: jsonEncode({
         'nombre': nombre,

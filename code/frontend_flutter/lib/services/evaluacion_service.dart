@@ -1,14 +1,12 @@
 import 'dart:convert';
 import 'package:http/http.dart' as http;
-
+import '../consts/api_constants.dart';
 import '../models/evaluacion.dart';
 
 class EvaluacionService {
-  static const String _baseUrl = 'https://ihc-gestioncorporal.onrender.com';
-
   Future<List<Evaluacion>> getEvaluaciones(int pacienteId) async {
     final response = await http.get(
-      Uri.parse('$_baseUrl/evaluaciones/paciente/$pacienteId'),
+      Uri.parse('$baseUrl/evaluaciones/paciente/$pacienteId'),
       headers: {'Content-Type': 'application/json'},
     );
 
