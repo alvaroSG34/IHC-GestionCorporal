@@ -125,7 +125,7 @@ class EvaluacionDetalleView extends StatelessWidget {
           _filaMedicion(
             'Masa muscular',
             evaluacion.masa_muscular.toStringAsFixed(1),
-            'kg',
+            '%',
             ultima: true,
           ),
         ],
