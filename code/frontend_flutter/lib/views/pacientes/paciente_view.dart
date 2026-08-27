@@ -206,13 +206,10 @@ class _TarjetaPaciente extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Row(
               children: [
-                Container(
-                  width: 46,
-                  height: 46,
-                  decoration: BoxDecoration(
-                    color: const Color(0xFFE0E0E0),
-                    borderRadius: BorderRadius.circular(4),
-                  ),
+                const Icon(
+                  Icons.person,
+                  color: Color.fromARGB(255, 104, 23, 23),
+                  size: 46,
                 ),
                 const SizedBox(width: 20),
                 Expanded(
