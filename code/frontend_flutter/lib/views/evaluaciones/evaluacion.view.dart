@@ -209,7 +209,7 @@ class _TarjetaEvaluacion extends StatelessWidget {
                 color: Color(0xFFE0E0E0),
               ),
               child: Text(
-                '${evaluacion.id}',
+                '${evaluacion.nro_evaluacion}',
                 style: const TextStyle(color: Color(0xFF616161), fontSize: 14),
               ),
             ),

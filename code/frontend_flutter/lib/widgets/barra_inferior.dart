@@ -38,11 +38,6 @@ class BarraInferior extends StatelessWidget {
             seleccionado: indiceSeleccionado == 2,
             alTocar: () => alCambiar(2),
           ),
-          _ElementoNavegacion(
-            texto: 'Más',
-            seleccionado: indiceSeleccionado == 3,
-            alTocar: () => alCambiar(3),
-          ),
         ],
       ),
     );
