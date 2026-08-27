@@ -6,6 +6,7 @@ import '../../models/evaluacion.dart';
 import '../../models/paciente.dart';
 import '../../services/evaluacion_service.dart';
 import '../../widgets/barra_inferior.dart';
+import 'evaluacion_create_view.dart';
 
 class EvaluacionView extends StatefulWidget {
   const EvaluacionView({super.key, required this.paciente});
@@ -29,6 +30,19 @@ class _EvaluacionViewState extends State<EvaluacionView> {
     _futuroEvaluaciones = EvaluacionService().getEvaluaciones(
       widget.paciente.id,
     );
+  }
+
+  Future<void> _abrirCrearEvaluacion() async {
+    final resultado = await Navigator.push<bool>(
+      context,
+      MaterialPageRoute(
+        builder: (_) => EvaluacionCreateView(paciente: widget.paciente),
+      ),
+    );
+
+    if (resultado == true && mounted) {
+      setState(_cargarEvaluaciones);
+    }
   }
 
   @override
@@ -87,9 +101,15 @@ class _EvaluacionViewState extends State<EvaluacionView> {
                 ),
               ),
               const Spacer(),
-              const Text(
-                '+',
-                style: TextStyle(color: Color(0xFF2E2E2E), fontSize: 28),
+              IconButton(
+                padding: EdgeInsets.zero,
+                constraints: const BoxConstraints.tightFor(
+                  width: 28,
+                  height: 32,
+                ),
+                icon: const Icon(Icons.add, size: 28),
+                color: const Color(0xFF2E2E2E),
+                onPressed: _abrirCrearEvaluacion,
               ),
             ],
           ),
@@ -132,7 +152,7 @@ class _EvaluacionViewState extends State<EvaluacionView> {
                 return ListView.separated(
                   padding: EdgeInsets.zero,
                   itemCount: evaluaciones.length,
-                  separatorBuilder: (_, _) => const SizedBox(height: 21),
+                  separatorBuilder: (_, _) => const SizedBox(height: 16),
                   itemBuilder: (contexto, indice) =>
                       _TarjetaEvaluacion(evaluacion: evaluaciones[indice]),
                 );
@@ -153,7 +173,7 @@ class _TarjetaEvaluacion extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 112,
+      height: 74,
       padding: const EdgeInsets.symmetric(horizontal: 15),
       decoration: BoxDecoration(
         color: const Color(0xFFF0F0F0),
@@ -175,38 +195,15 @@ class _TarjetaEvaluacion extends StatelessWidget {
             ),
           ),
           const SizedBox(width: 17),
-          Column(
-            mainAxisAlignment: MainAxisAlignment.center,
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                _formatearFecha(evaluacion.fechaRegistro),
-                style: TextStyle(
-                  color: const Color(0xFF2E2E2E),
-                  fontFamily: semibold,
-                  fontSize: 14,
-                ),
+          Expanded(
+            child: Text(
+              _formatearFecha(evaluacion.fechaRegistro),
+              style: TextStyle(
+                color: const Color(0xFF2E2E2E),
+                fontFamily: semibold,
+                fontSize: 14,
               ),
-              const SizedBox(height: 12),
-              Row(
-                children: [
-                  const SizedBox(
-                    width: 60,
-                    child: Text(
-                      'Peso',
-                      style: TextStyle(color: Color(0xFF616161), fontSize: 12),
-                    ),
-                  ),
-                  Text(
-                    '${evaluacion.peso.toStringAsFixed(1)} kg',
-                    style: const TextStyle(
-                      color: Color(0xFF616161),
-                      fontSize: 12,
-                    ),
-                  ),
-                ],
-              ),
-            ],
+            ),
           ),
           const Spacer(),
           const Icon(Icons.chevron_right, color: Color(0xFF616161), size: 28),
