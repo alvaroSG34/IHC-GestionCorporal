@@ -4,7 +4,7 @@ import '../../consts/colors.dart';
 import '../../consts/styles.dart';
 import '../../models/paciente.dart';
 import '../../services/paciente_service.dart';
-import '../evaluaciones/evaluacion.view.dart';
+import 'paciente_detalle_view.dart';
 import 'paciente_create_view.dart';
 
 class PacienteView extends StatefulWidget {
@@ -160,7 +160,7 @@ class _PacienteViewState extends State<PacienteView> {
                             contexto,
                             MaterialPageRoute(
                               builder: (_) =>
-                                  EvaluacionView(pacienteId: paciente.id),
+                                  PacienteDetalleView(paciente: paciente),
                             ),
                           );
                         },
