@@ -7,6 +7,7 @@ import '../../models/paciente.dart';
 import '../../services/evaluacion_service.dart';
 import '../../widgets/barra_inferior.dart';
 import 'evaluacion_create_view.dart';
+import 'evaluacion_detalle_view.dart';
 
 class EvaluacionView extends StatefulWidget {
   const EvaluacionView({super.key, required this.paciente});
@@ -43,6 +44,18 @@ class _EvaluacionViewState extends State<EvaluacionView> {
     if (resultado == true && mounted) {
       setState(_cargarEvaluaciones);
     }
+  }
+
+  void _abrirDetalle(Evaluacion evaluacion) {
+    Navigator.push(
+      context,
+      MaterialPageRoute(
+        builder: (_) => EvaluacionDetalleView(
+          evaluacion: evaluacion,
+          paciente: widget.paciente,
+        ),
+      ),
+    );
   }
 
   @override
@@ -153,8 +166,10 @@ class _EvaluacionViewState extends State<EvaluacionView> {
                   padding: EdgeInsets.zero,
                   itemCount: evaluaciones.length,
                   separatorBuilder: (_, _) => const SizedBox(height: 16),
-                  itemBuilder: (contexto, indice) =>
-                      _TarjetaEvaluacion(evaluacion: evaluaciones[indice]),
+                  itemBuilder: (contexto, indice) => _TarjetaEvaluacion(
+                    evaluacion: evaluaciones[indice],
+                    alTocar: () => _abrirDetalle(evaluaciones[indice]),
+                  ),
                 );
               },
             ),
@@ -166,48 +181,52 @@ class _EvaluacionViewState extends State<EvaluacionView> {
 }
 
 class _TarjetaEvaluacion extends StatelessWidget {
-  const _TarjetaEvaluacion({required this.evaluacion});
+  const _TarjetaEvaluacion({required this.evaluacion, required this.alTocar});
 
   final Evaluacion evaluacion;
+  final VoidCallback alTocar;
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 74,
-      padding: const EdgeInsets.symmetric(horizontal: 15),
-      decoration: BoxDecoration(
-        color: const Color(0xFFF0F0F0),
-        borderRadius: BorderRadius.circular(10),
-      ),
-      child: Row(
-        children: [
-          Container(
-            width: 40,
-            height: 40,
-            alignment: Alignment.center,
-            decoration: const BoxDecoration(
-              shape: BoxShape.circle,
-              color: Color(0xFFE0E0E0),
-            ),
-            child: Text(
-              '${evaluacion.id}',
-              style: const TextStyle(color: Color(0xFF616161), fontSize: 14),
-            ),
-          ),
-          const SizedBox(width: 17),
-          Expanded(
-            child: Text(
-              _formatearFecha(evaluacion.fechaRegistro),
-              style: TextStyle(
-                color: const Color(0xFF2E2E2E),
-                fontFamily: semibold,
-                fontSize: 14,
+    return InkWell(
+      onTap: alTocar,
+      borderRadius: BorderRadius.circular(10),
+      child: Container(
+        height: 74,
+        padding: const EdgeInsets.symmetric(horizontal: 15),
+        decoration: BoxDecoration(
+          color: const Color(0xFFF0F0F0),
+          borderRadius: BorderRadius.circular(10),
+        ),
+        child: Row(
+          children: [
+            Container(
+              width: 40,
+              height: 40,
+              alignment: Alignment.center,
+              decoration: const BoxDecoration(
+                shape: BoxShape.circle,
+                color: Color(0xFFE0E0E0),
+              ),
+              child: Text(
+                '${evaluacion.id}',
+                style: const TextStyle(color: Color(0xFF616161), fontSize: 14),
               ),
             ),
-          ),
-          const Spacer(),
-          const Icon(Icons.chevron_right, color: Color(0xFF616161), size: 28),
-        ],
+            const SizedBox(width: 17),
+            Expanded(
+              child: Text(
+                _formatearFecha(evaluacion.fechaRegistro),
+                style: TextStyle(
+                  color: const Color(0xFF2E2E2E),
+                  fontFamily: semibold,
+                  fontSize: 14,
+                ),
+              ),
+            ),
+            const Icon(Icons.chevron_right, color: Color(0xFF616161), size: 28),
+          ],
+        ),
       ),
     );
   }
