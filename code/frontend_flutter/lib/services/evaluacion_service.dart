@@ -20,4 +20,30 @@ class EvaluacionService {
       );
     }
   }
+
+  Future<Evaluacion> createEvaluacion({
+    required int paciente,
+    required int altura,
+    required double peso,
+    required double masa,
+    String? observacion,
+  }) async {
+    final response = await http.post(
+      Uri.parse('$baseUrl/evaluaciones/'),
+      headers: {'Content-Type': 'application/json'},
+      body: jsonEncode({
+        'altura': altura,
+        'peso': peso,
+        'masa_muscular': masa,
+        'observacion': observacion,
+        'paciente_id': paciente,
+      }),
+    );
+
+    if (response.statusCode == 201) {
+      return Evaluacion.fromJson(jsonDecode(response.body));
+    } else {
+      throw Exception('Error al crear Evaluacion: ${response.body}');
+    }
+  }
 }
