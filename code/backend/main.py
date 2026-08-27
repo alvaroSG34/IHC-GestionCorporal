@@ -1,4 +1,5 @@
-from fastapi import FastAPI,CORSMiddleware
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from database import Base, engine
 from app.pacientes.router import paciente
 from app.evaluaciones.router import evaluacion
