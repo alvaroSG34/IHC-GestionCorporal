@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../consts/colors.dart';
 import '../../consts/styles.dart';
 import '../../models/paciente.dart';
+import '../../services/paciente_service.dart';
 import '../../widgets/barra_inferior.dart';
 import '../evaluaciones/evaluacion.view.dart';
 
@@ -70,13 +71,10 @@ class PacienteDetalleView extends StatelessWidget {
             ),
           ),
           const SizedBox(height: 4),
-          Container(
-            width: 90,
-            height: 90,
-            decoration: const BoxDecoration(
-              shape: BoxShape.circle,
-              color: Color(0xFFE0E0E0),
-            ),
+          const Icon(
+            Icons.person,
+            color: Color.fromARGB(255, 104, 23, 23),
+            size: 80,
           ),
           const SizedBox(height: 18),
           Text(
@@ -88,15 +86,15 @@ class PacienteDetalleView extends StatelessWidget {
               fontSize: 23,
             ),
           ),
-          const SizedBox(height: 14),
+          const SizedBox(height: 20),
           Text(
             '${_calcularEdad()} años',
-            style: const TextStyle(color: Color(0xFF616161), fontSize: 14),
+            style: const TextStyle(color: Color(0xFF616161), fontSize: 20),
           ),
-          const SizedBox(height: 12),
+          const SizedBox(height: 18),
           Text(
             _mostrarSexo(),
-            style: const TextStyle(color: Color(0xFF616161), fontSize: 14),
+            style: const TextStyle(color: Color(0xFF616161), fontSize: 20),
           ),
           const SizedBox(height: 29),
           _resumenMedidas(),
@@ -133,21 +131,28 @@ class PacienteDetalleView extends StatelessWidget {
   }
 
   Widget _resumenMedidas() {
-    return Container(
-      height: 105,
-      decoration: BoxDecoration(
-        color: const Color(0xFFF0F0F0),
-        borderRadius: BorderRadius.circular(12),
-      ),
-      child: Row(
-        children: [
-          _medida('Peso', '70', 'kg'),
-          _separador(),
-          _medida('Altura', '170', 'cm'),
-          _separador(),
-          _medida('IMC', '24.2', 'kg/m²'),
-        ],
-      ),
+    return FutureBuilder<Map<String, dynamic>?>(
+      future: PacienteService().getUltimaEvaluacion(paciente.id),
+      builder: (context, estado) {
+        final evaluacion = estado.data;
+
+        return Container(
+          height: 105,
+          decoration: BoxDecoration(
+            color: const Color(0xFFF0F0F0),
+            borderRadius: BorderRadius.circular(12),
+          ),
+          child: Row(
+            children: [
+              _medida('Peso', evaluacion?['peso']?.toString() ?? '-', 'kg'),
+              _separador(),
+              _medida('Altura', evaluacion?['altura']?.toString() ?? '-', 'cm'),
+              _separador(),
+              _medida('IMC', evaluacion?['imc']?.toString() ?? '-', 'kg/m²'),
+            ],
+          ),
+        );
+      },
     );
   }
 
@@ -165,24 +170,17 @@ class PacienteDetalleView extends StatelessWidget {
             ),
             const SizedBox(height: 14),
             Container(
-              height: 18,
+              height: 30,
               width: double.infinity,
-              decoration: BoxDecoration(
-                color: const Color(0xFFE0E0E0),
-                borderRadius: BorderRadius.circular(3),
-              ),
               alignment: Alignment.center,
-              child: Text(
-                valor,
-                style: const TextStyle(color: Color(0xFF616161), fontSize: 12),
-              ),
+              child: Text(valor, style: const TextStyle(fontSize: 20)),
             ),
-            const SizedBox(height: 5),
+            const SizedBox(height: 10),
             Align(
               alignment: Alignment.center,
               child: Text(
                 unidad,
-                style: const TextStyle(color: Color(0xFF616161), fontSize: 12),
+                style: const TextStyle(color: Color(0xFF616161), fontSize: 14),
               ),
             ),
           ],
@@ -192,6 +190,10 @@ class PacienteDetalleView extends StatelessWidget {
   }
 
   Widget _separador() {
-    return Container(width: 1, height: 74, color: const Color(0xFFC7C7C7));
+    return Container(
+      width: 1,
+      height: 74,
+      color: const Color.fromARGB(255, 15, 16, 15),
+    );
   }
 }
