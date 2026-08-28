@@ -56,7 +56,7 @@ class _PacienteViewState extends State<PacienteView> {
     return Material(
       color: const Color(0xFFFBFBFB),
       child: Padding(
-        padding: const EdgeInsets.fromLTRB(23, 20, 23, 0),
+        padding: const EdgeInsets.fromLTRB(24, 24, 24, 0),
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
@@ -77,8 +77,8 @@ class _PacienteViewState extends State<PacienteView> {
                   child: IconButton(
                     padding: EdgeInsets.zero,
                     constraints: const BoxConstraints.tightFor(
-                      width: 28,
-                      height: 28,
+                      width: 48,
+                      height: 48,
                     ),
                     icon: const Icon(Icons.add, size: 24),
                     color: const Color(0xFF2E2E2E),
@@ -87,15 +87,15 @@ class _PacienteViewState extends State<PacienteView> {
                 ),
               ],
             ),
-            const SizedBox(height: 20),
+            const SizedBox(height: 24),
             TextField(
               controller: _controladorBusqueda,
-              style: const TextStyle(fontSize: 14, color: Color(0xFF616161)),
+              style: const TextStyle(fontSize: 16, color: Color(0xFF616161)),
               decoration: InputDecoration(
                 hintText: 'Buscar paciente',
                 hintStyle: const TextStyle(
                   color: Color(0xFF616161),
-                  fontSize: 14,
+                  fontSize: 16,
                 ),
                 filled: true,
                 fillColor: const Color(0xFFF0F0F0),
@@ -150,7 +150,7 @@ class _PacienteViewState extends State<PacienteView> {
                   return ListView.separated(
                     padding: EdgeInsets.zero,
                     itemCount: pacientes.length,
-                    separatorBuilder: (_, _) => const SizedBox(height: 18),
+                    separatorBuilder: (_, _) => const SizedBox(height: 16),
                     itemBuilder: (contexto, indice) {
                       final paciente = pacientes[indice];
                       return _TarjetaPaciente(
@@ -201,7 +201,7 @@ class _TarjetaPaciente extends StatelessWidget {
         borderRadius: BorderRadius.circular(10),
         onTap: alTocar,
         child: SizedBox(
-          height: 74,
+          height: 72,
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16),
             child: Row(
@@ -211,7 +211,7 @@ class _TarjetaPaciente extends StatelessWidget {
                   color: Color.fromARGB(255, 104, 23, 23),
                   size: 46,
                 ),
-                const SizedBox(width: 20),
+                const SizedBox(width: 16),
                 Expanded(
                   child: Column(
                     mainAxisAlignment: MainAxisAlignment.center,
@@ -224,10 +224,10 @@ class _TarjetaPaciente extends StatelessWidget {
                         style: TextStyle(
                           color: const Color(0xFF2E2E2E),
                           fontFamily: semibold,
-                          fontSize: 15,
+                          fontSize: 16,
                         ),
                       ),
-                      const SizedBox(height: 5),
+                      const SizedBox(height: 4),
                       Text(
                         '$sexo · $fecha',
                         maxLines: 1,
