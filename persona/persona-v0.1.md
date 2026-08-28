@@ -37,3 +37,6 @@ Abrir Aplicacion -> Ir pacientes -> Elegir Marcelo -> Ver evaluaciones -> Elegir
 # 2do Flujo - Crear una Evaluacion
 
 Abrir Aplicacion -> Ir pacientes -> Elegir Marcelo -> Ver evaluaciones -> Crear Evaluacion -> Guardar Evaluacion
+
+
+- Link Figma: https://www.figma.com/design/FjHzmx94qg50pOuDR3GNb4/Wireframes---Gesti%C3%B3n-Corporal-Nutrici%C3%B3n?node-id=0-1&t=csUtcsrG6fS1egDc-1
