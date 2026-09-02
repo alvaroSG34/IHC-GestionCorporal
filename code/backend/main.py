@@ -1,10 +1,12 @@
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from database import Base, engine
 from app.pacientes.router import paciente
 from app.evaluaciones.router import evaluacion
 from app.pacientes.model.paciente import Paciente
 from app.evaluaciones.model.evaluacion import Evaluacion
-from fastapi.middleware.cors import CORSMiddleware
+
+
 Base.metadata.create_all(bind=engine)
 
 app = FastAPI()
