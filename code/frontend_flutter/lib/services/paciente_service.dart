@@ -4,6 +4,25 @@ import '../consts/api_constants.dart';
 import '../models/paciente.dart';
 
 class PacienteService {
+  Future<Map<String, dynamic>?> getUltimaEvaluacion(int pacienteId) async {
+    final response = await http.get(
+      Uri.parse('$baseUrl/evaluaciones/paciente/$pacienteId/ultimaevaluacion'),
+      headers: {'Content-Type': 'application/json'},
+    );
+
+    if (response.statusCode == 200) {
+      return jsonDecode(response.body) as Map<String, dynamic>;
+    }
+
+    if (response.statusCode == 404) {
+      return null;
+    }
+
+    throw Exception(
+      'Error al cargar la ultima evaluacion: ${response.statusCode} - ${response.body}',
+    );
+  }
+
   Future<List<Paciente>> getPacientes() async {
     final response = await http.get(
       Uri.parse('$baseUrl/pacientes/'),

@@ -26,4 +26,17 @@ NECESITAD: Encontrar la informacion nutricional del paciente rapidamente
 Abrir Aplicacion -> Ir pacientes -> Elegir Marcelo -> Ver evaluaciones -> Elegir una Evaluacion
 
 
-Añadir: Registrar Peso 
+
+# V.2
+
+- SITUACION: Nutricionista de una clinica, almacena la informacion de consultas de manera fisica.
+- OBJETIVO: Registrar las medidas basicas del paciente
+- DIFICULTAD: Demora demasiado tiempo hacerlas manualmente
+- NECESITAD: Buscar una mejor forma de registrar las medidas
+
+# 2do Flujo - Crear una Evaluacion
+
+Abrir Aplicacion -> Ir pacientes -> Elegir Marcelo -> Ver evaluaciones -> Crear Evaluacion -> Guardar Evaluacion
+
+
+- Link Figma: https://www.figma.com/design/FjHzmx94qg50pOuDR3GNb4/Wireframes---Gesti%C3%B3n-Corporal-Nutrici%C3%B3n?node-id=0-1&t=csUtcsrG6fS1egDc-1

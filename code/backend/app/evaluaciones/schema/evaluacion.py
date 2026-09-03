@@ -1,4 +1,5 @@
 from pydantic import BaseModel, computed_field
+from typing import Optional
 from datetime import datetime
 
 class RegistrarEvaluacion(BaseModel):
@@ -14,6 +15,13 @@ def imc(peso:float,altura:int)->float:
     altura_cuadrada = altura_metro ** 2
     imc_calculado = round((peso /altura_cuadrada),2)
     return imc_calculado  
+
+class ActualizarEvaluacion(BaseModel):
+    altura:Optional[int] =None
+    peso:Optional[float] =None
+    masa_muscular:Optional[float] = None
+    observacion: Optional[str | None]= None
+    paciente_id: Optional[int] =None
 
 class MostrarEvaluacion(BaseModel):
     id:int

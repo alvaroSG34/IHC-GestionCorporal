@@ -46,3 +46,5 @@ app.*.map.json
 
 analysis_options.yaml
 pubspec.lock
+
+/lib/consts/api_constants.dart
