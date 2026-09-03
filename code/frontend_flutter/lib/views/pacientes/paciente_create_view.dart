@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 import '../../consts/colors.dart';
 import '../../consts/styles.dart';
 import '../../services/paciente_service.dart';
-import '../../widgets/barra_inferior.dart';
+import '../../widgets/input.dart';
+import '../../widgets/top_app_bar.dart';
 
 class PacienteCreateView extends StatefulWidget {
   const PacienteCreateView({super.key});
@@ -22,13 +23,13 @@ class _PacienteCreateViewState extends State<PacienteCreateView> {
 
   Future<void> _guardarPaciente() async {
     if (_cNombre.text.trim().isEmpty || _cFecha.text.trim().isEmpty) {
-      _mostrarMensaje('completa nombre y fecha');
+      _mostrarMensaje('Completa nombre y fecha');
       return;
     }
 
     final fechaNacimiento = DateTime.tryParse(_cFecha.text.trim());
     if (fechaNacimiento == null) {
-      _mostrarMensaje('la fecha debe tener el formato año-mes-dia');
+      _mostrarMensaje('La fecha debe tener el formato año-mes-día');
       return;
     }
 
@@ -75,19 +76,17 @@ class _PacienteCreateViewState extends State<PacienteCreateView> {
         child: Container(
           decoration: BoxDecoration(
             color: const Color(0xFFFBFBFB),
-            border: Border.all(color: const Color(0xFFC7C7C7)),
+            border: Border.all(color: const Color(0xFFB8B8B8)),
             borderRadius: BorderRadius.circular(18),
           ),
           clipBehavior: Clip.antiAlias,
           child: Column(
             children: [
-              Expanded(child: _formulario()),
-              BarraInferior(
-                indiceSeleccionado: 1,
-                alCambiar: (indice) {
-                  if (indice == 1) Navigator.pop(context);
-                },
+              TopAppBar(
+                titulo: 'Nuevo paciente',
+                alVolver: () => Navigator.pop(context),
               ),
+              Expanded(child: _formulario()),
             ],
           ),
         ),
@@ -97,73 +96,49 @@ class _PacienteCreateViewState extends State<PacienteCreateView> {
 
   Widget _formulario() {
     return SingleChildScrollView(
-      padding: const EdgeInsets.fromLTRB(23, 20, 23, 24),
+      padding: const EdgeInsets.symmetric(horizontal: 24),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Row(
-            children: [
-              IconButton(
-                padding: EdgeInsets.zero,
-                constraints: const BoxConstraints.tightFor(
-                  width: 24,
-                  height: 30,
-                ),
-                icon: const Icon(Icons.chevron_left, size: 30),
-                color: const Color(0xFF616161),
-                onPressed: () => Navigator.pop(context),
-              ),
-              const SizedBox(width: 11),
-              Text(
-                'Nuevo paciente',
-                style: TextStyle(
-                  color: const Color(0xFF2E2E2E),
-                  fontFamily: semibold,
-                  fontSize: 23,
-                ),
-              ),
-            ],
+          const SizedBox(height: 8),
+          Input(etiqueta: 'Nombre', controlador: _cNombre, placeholder: 'Text'),
+          const SizedBox(height: 32),
+          const Text(
+            'Sexo',
+            style: TextStyle(
+              color: Color(0xFF2E2E2E),
+              fontFamily: regular,
+              fontSize: 16,
+              height: 24 / 16,
+            ),
           ),
-          const SizedBox(height: 52),
-          _etiqueta('Nombre'),
-          const SizedBox(height: 10),
-          _campoTexto(controller: _cNombre),
-          const SizedBox(height: 18),
-          _etiqueta('Sexo'),
-          const SizedBox(height: 10),
+          const SizedBox(height: 8),
           _campoSexo(),
-          const SizedBox(height: 18),
-          _etiqueta('Fecha de nacimiento'),
-          const SizedBox(height: 10),
-          _campoTexto(
-            controller: _cFecha,
-            hint: 'AAAA-MM-DD',
-            colorHint: const Color(0xFFADADAD),
-          ),
-          const SizedBox(height: 18),
-          _etiqueta('Teléfono'),
-          const SizedBox(height: 10),
-          _campoTexto(
-            controller: _cTelefono,
-            hint: 'Número de teléfono',
-            colorHint: const Color(0xFFADADAD),
+          const SizedBox(height: 31),
+          Input(etiqueta: 'Fecha (yyyy-MM-dd)', controlador: _cFecha),
+          const SizedBox(height: 8),
+          Input(
+            etiqueta: 'Teléfono',
+            controlador: _cTelefono,
+            placeholder: 'Telefono',
             tipoTeclado: TextInputType.phone,
           ),
-          const SizedBox(height: 48),
+          const SizedBox(height: 32),
           Center(
             child: SizedBox(
-              width: 158,
-              height: 48,
+              width: 138,
+              height: 46,
               child: ElevatedButton(
                 onPressed: _guardando ? null : _guardarPaciente,
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFFF0F0F0),
-                  foregroundColor: const Color(0xFF2E2E2E),
-                  disabledBackgroundColor: const Color(0xFFF0F0F0),
+                  backgroundColor: const Color(0xFFDDFFDF),
+                  foregroundColor: const Color(0xFF616161),
+                  disabledBackgroundColor: const Color(0xFFDDFFDF),
                   elevation: 0,
+                  padding: EdgeInsets.zero,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10),
-                    side: const BorderSide(color: Color(0xFFB8B8B8)),
+                    side: const BorderSide(color: Color(0xFFDDFFDF)),
                   ),
                 ),
                 child: _guardando
@@ -172,9 +147,9 @@ class _PacienteCreateViewState extends State<PacienteCreateView> {
                         height: 18,
                         child: CircularProgressIndicator(strokeWidth: 2),
                       )
-                    : Text(
+                    : const Text(
                         'Guardar',
-                        style: TextStyle(fontFamily: semibold, fontSize: 14),
+                        style: TextStyle(fontFamily: semibold, fontSize: 15),
                       ),
               ),
             ),
@@ -184,55 +159,59 @@ class _PacienteCreateViewState extends State<PacienteCreateView> {
     );
   }
 
-  Widget _etiqueta(String texto) {
-    return Text(
-      texto,
-      style: const TextStyle(color: Color(0xFF616161), fontSize: 14),
-    );
-  }
-
-  Widget _campoTexto({
-    required TextEditingController controller,
-    String? hint,
-    Color? colorHint,
-    TextInputType? tipoTeclado,
-  }) {
-    return TextField(
-      controller: controller,
-      keyboardType: tipoTeclado,
-      style: const TextStyle(color: Color(0xFF616161), fontSize: 14),
-      decoration: InputDecoration(
-        hintText: hint,
-        hintStyle: TextStyle(color: colorHint ?? const Color(0xFF616161)),
-        contentPadding: const EdgeInsets.only(bottom: 8),
-        border: const UnderlineInputBorder(
-          borderSide: BorderSide(color: Color(0xFF9E9E9E)),
+  Widget _campoSexo() {
+    return RadioGroup<String>(
+      groupValue: _sexo,
+      onChanged: (nuevoValor) {
+        if (nuevoValor != null) setState(() => _sexo = nuevoValor);
+      },
+      child: SizedBox(
+        height: 22,
+        child: Row(
+          children: [
+            const SizedBox(width: 54),
+            _opcionSexo(valor: 'M', etiqueta: 'Masculino'),
+            const SizedBox(width: 16),
+            _etiquetaSexo('Masculino'),
+            const SizedBox(width: 16),
+            _opcionSexo(valor: 'F', etiqueta: 'Femenino'),
+            const SizedBox(width: 16),
+            _etiquetaSexo('Femenino'),
+          ],
         ),
       ),
     );
   }
 
-  Widget _campoSexo() {
-    return RadioGroup<String>(
-      groupValue: _sexo,
-      onChanged: (valor) {
-        if (valor != null) setState(() => _sexo = valor);
-      },
-      child: Row(
-        children: [
-          const SizedBox(width: 48),
-          const Radio<String>(value: 'M', activeColor: Color(0xFF616161)),
-          const Text(
-            'Masculino',
-            style: TextStyle(color: Color(0xFF2E2E2E), fontSize: 14),
-          ),
-          const SizedBox(width: 28),
-          const Radio<String>(value: 'F', activeColor: Color(0xFF616161)),
-          const Text(
-            'Femenino',
-            style: TextStyle(color: Color(0xFF2E2E2E), fontSize: 14),
-          ),
-        ],
+  Widget _opcionSexo({required String valor, required String etiqueta}) {
+    return Semantics(
+      label: etiqueta,
+      inMutuallyExclusiveGroup: true,
+      checked: _sexo == valor,
+      child: SizedBox(
+        width: 22,
+        height: 22,
+        child: Radio<String>(
+          value: valor,
+          activeColor: const Color(0xFF616161),
+          materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
+          visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
+        ),
+      ),
+    );
+  }
+
+  Widget _etiquetaSexo(String texto) {
+    return SizedBox(
+      width: 88,
+      child: Text(
+        texto,
+        style: const TextStyle(
+          color: Color(0xFF2E2E2E),
+          fontFamily: regular,
+          fontSize: 14,
+          height: 16 / 14,
+        ),
       ),
     );
   }
