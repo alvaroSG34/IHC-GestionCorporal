@@ -7,6 +7,7 @@ import '../../services/paciente_service.dart';
 import '../../widgets/barra_inferior.dart';
 import '../../widgets/top_app_bar.dart';
 import '../evaluaciones/evaluacion.view.dart';
+import 'paciente_edit_view.dart';
 
 class PacienteDetalleView extends StatelessWidget {
   const PacienteDetalleView({super.key, required this.paciente});
@@ -48,12 +49,16 @@ class PacienteDetalleView extends StatelessWidget {
               TopAppBar(
                 alVolver: () => Navigator.pop(context),
                 textoAccion: 'Editar',
-                alAccion: () {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('Edición de paciente pendiente'),
+                alAccion: () async {
+                  final actualizado = await Navigator.push<bool>(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => PacienteEditView(paciente: paciente),
                     ),
                   );
+                  if (actualizado == true && context.mounted) {
+                    Navigator.pop(context, true);
+                  }
                 },
               ),
               Expanded(child: _contenido(context)),

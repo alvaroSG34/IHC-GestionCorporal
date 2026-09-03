@@ -145,14 +145,17 @@ class _PacienteViewState extends State<PacienteView> {
                             final paciente = pacientes[indice];
                             return _TarjetaPaciente(
                               paciente: paciente,
-                              alTocar: () {
-                                Navigator.push(
+                              alTocar: () async {
+                                final actualizado = await Navigator.push<bool>(
                                   contexto,
                                   MaterialPageRoute(
                                     builder: (_) =>
                                         PacienteDetalleView(paciente: paciente),
                                   ),
                                 );
+                                if (actualizado == true && mounted) {
+                                  setState(_cargarPacientes);
+                                }
                               },
                             );
                           },
