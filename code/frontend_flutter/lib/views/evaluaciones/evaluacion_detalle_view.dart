@@ -5,6 +5,7 @@ import '../../consts/styles.dart';
 import '../../models/evaluacion.dart';
 import '../../models/paciente.dart';
 import '../../widgets/barra_inferior.dart';
+import '../../widgets/top_app_bar.dart';
 
 class EvaluacionDetalleView extends StatelessWidget {
   const EvaluacionDetalleView({
@@ -30,7 +31,19 @@ class EvaluacionDetalleView extends StatelessWidget {
           clipBehavior: Clip.antiAlias,
           child: Column(
             children: [
-              Expanded(child: _contenido(context)),
+              TopAppBar(
+                titulo: 'Evaluación',
+                alVolver: () => Navigator.pop(context),
+                textoAccion: 'Editar',
+                alAccion: () {
+                  ScaffoldMessenger.of(context).showSnackBar(
+                    const SnackBar(
+                      content: Text('Edición de evaluación pendiente'),
+                    ),
+                  );
+                },
+              ),
+              Expanded(child: _contenido()),
               BarraInferior(
                 indiceSeleccionado: 2,
                 alCambiar: (indice) {
@@ -44,67 +57,56 @@ class EvaluacionDetalleView extends StatelessWidget {
     );
   }
 
-  Widget _contenido(BuildContext context) {
+  Widget _contenido() {
     return SingleChildScrollView(
-      padding: const EdgeInsets.fromLTRB(17, 15, 24, 24),
+      padding: const EdgeInsets.symmetric(horizontal: 24),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          Row(
-            children: [
-              IconButton(
-                padding: EdgeInsets.zero,
-                constraints: const BoxConstraints.tightFor(
-                  width: 24,
-                  height: 32,
-                ),
-                icon: const Icon(Icons.chevron_left, size: 32),
-                color: const Color(0xFF616161),
-                onPressed: () => Navigator.pop(context),
-              ),
-              const SizedBox(width: 16),
-              Text(
-                'Evaluación',
-                style: TextStyle(
-                  color: const Color(0xFF2E2E2E),
-                  fontFamily: semibold,
-                  fontSize: 24,
-                ),
-              ),
-            ],
-          ),
-          const SizedBox(height: 20),
-          Text(_formatearFecha(evaluacion.fechaRegistro), style: _texto()),
-          const SizedBox(height: 8),
+          const SizedBox(height: 15),
           Text(
             paciente.nombre,
-            style: TextStyle(
-              color: const Color(0xFF2E2E2E),
+            style: const TextStyle(
+              color: Color(0xFF2E2E2E),
               fontFamily: semibold,
-              fontSize: 20,
+              fontSize: 16,
+              height: 24 / 16,
             ),
           ),
-          const SizedBox(height: 26),
-          Text('Mediciones', style: _tituloSeccion()),
-          const SizedBox(height: 12),
+          const SizedBox(height: 8),
+          Text(
+            'Evaluación ${evaluacion.nro_evaluacion} · ${_formatearFecha(evaluacion.fechaRegistro)}',
+            style: const TextStyle(
+              color: Color(0xFF616161),
+              fontFamily: regular,
+              fontSize: 14,
+              height: 24 / 14,
+            ),
+          ),
+          const SizedBox(height: 16),
+          const Text(
+            'Mediciones',
+            style: TextStyle(
+              color: Color(0xFF2E2E2E),
+              fontFamily: semibold,
+              fontSize: 16,
+              height: 24 / 16,
+            ),
+          ),
+          const SizedBox(height: 8),
           _mediciones(),
-          const SizedBox(height: 32),
-          Text('Observaciones', style: _tituloSeccion()),
-          const SizedBox(height: 12),
-          Container(
-            constraints: const BoxConstraints(minHeight: 105),
-            padding: const EdgeInsets.all(18),
-            decoration: BoxDecoration(
-              color: const Color(0xFFF0F0F0),
-              borderRadius: BorderRadius.circular(12),
-            ),
-            child: Text(
-              evaluacion.observacion?.trim().isNotEmpty == true
-                  ? evaluacion.observacion!.trim()
-                  : 'Sin observaciones',
-              style: _texto(),
+          const SizedBox(height: 16),
+          const Text(
+            'Observación',
+            style: TextStyle(
+              color: Color(0xFF2E2E2E),
+              fontFamily: semibold,
+              fontSize: 16,
+              height: 24 / 16,
             ),
           ),
+          const SizedBox(height: 8),
+          _observacion(),
         ],
       ),
     );
@@ -112,90 +114,106 @@ class EvaluacionDetalleView extends StatelessWidget {
 
   Widget _mediciones() {
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 16),
+      height: 208,
       decoration: BoxDecoration(
-        color: const Color(0xFFF0F0F0),
+        color: Colors.white,
         borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: const Color(0xFFE0E0E0)),
       ),
       child: Column(
         children: [
-          _filaMedicion('Peso', evaluacion.peso.toStringAsFixed(1), 'kg'),
-          _filaMedicion('Altura', '${evaluacion.altura}', 'cm'),
-          _filaMedicion('IMC', _calcularImc(), 'kg/m²'),
+          _filaMedicion('Peso', '${_numero(evaluacion.peso, 1)} kg'),
+          _filaMedicion('Altura', '${_numero(evaluacion.altura / 100, 2)} m'),
           _filaMedicion(
             'Masa muscular',
-            evaluacion.masa_muscular.toStringAsFixed(1),
-            '%',
-            ultima: true,
+            '${_numero(evaluacion.masa_muscular, 1)} %',
           ),
+          _filaMedicion('IMC', _numero(evaluacion.imc, 1), ultima: true),
         ],
       ),
     );
   }
 
-  Widget _filaMedicion(
-    String nombre,
-    String valor,
-    String unidad, {
-    bool ultima = false,
-  }) {
+  Widget _filaMedicion(String etiqueta, String valor, {bool ultima = false}) {
     return Container(
-      height: 47,
+      height: 48,
+      padding: const EdgeInsets.fromLTRB(16, 16, 16, 0),
       decoration: BoxDecoration(
         border: ultima
             ? null
-            : const Border(bottom: BorderSide(color: Color(0xFFC7C7C7))),
+            : const Border(bottom: BorderSide(color: Color(0xFFE0E0E0))),
       ),
       child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          Expanded(child: Text(nombre, style: _texto(fontSize: 13))),
-          Container(
-            width: 80,
-            height: 18,
-            alignment: Alignment.centerRight,
-            child: Text(valor, style: _texto(fontSize: 12)),
+          Expanded(
+            child: Text(
+              etiqueta,
+              style: const TextStyle(
+                color: Color(0xFF616161),
+                fontFamily: regular,
+                fontSize: 16,
+                height: 24 / 16,
+              ),
+            ),
           ),
-          const SizedBox(width: 10),
-          SizedBox(width: 31, child: Text(unidad, style: _texto(fontSize: 11))),
+          Text(
+            valor,
+            textAlign: TextAlign.right,
+            style: const TextStyle(
+              color: Color(0xFF2E2E2E),
+              fontFamily: semibold,
+              fontSize: 16,
+              height: 24 / 16,
+            ),
+          ),
         ],
       ),
     );
   }
 
-  String _calcularImc() {
-    final alturaEnMetros = evaluacion.altura / 100;
-    if (alturaEnMetros <= 0) return '-';
-    return (evaluacion.peso / (alturaEnMetros * alturaEnMetros))
-        .toStringAsFixed(2);
+  Widget _observacion() {
+    final observacion = evaluacion.observacion?.trim();
+
+    return Container(
+      constraints: const BoxConstraints(minHeight: 120),
+      padding: const EdgeInsets.all(16),
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(color: const Color(0xFFE0E0E0)),
+      ),
+      child: Text(
+        observacion?.isNotEmpty == true ? observacion! : 'Sin observaciones',
+        style: const TextStyle(
+          color: Color(0xFF616161),
+          fontFamily: regular,
+          fontSize: 15,
+          height: 24 / 15,
+        ),
+      ),
+    );
+  }
+
+  String _numero(num valor, int decimales) {
+    return valor.toStringAsFixed(decimales).replaceAll('.', ',');
   }
 
   String _formatearFecha(DateTime fecha) {
     const meses = [
-      'Enero',
-      'Febrero',
-      'Marzo',
-      'Abril',
-      'Mayo',
-      'Junio',
-      'Julio',
-      'Agosto',
-      'Septiembre',
-      'Octubre',
-      'Noviembre',
-      'Diciembre',
+      'ene',
+      'feb',
+      'mar',
+      'abr',
+      'may',
+      'jun',
+      'jul',
+      'ago',
+      'sep',
+      'oct',
+      'nov',
+      'dic',
     ];
     return '${fecha.day} ${meses[fecha.month - 1]} ${fecha.year}';
-  }
-
-  TextStyle _texto({double fontSize = 14}) {
-    return TextStyle(color: const Color(0xFF616161), fontSize: fontSize);
-  }
-
-  TextStyle _tituloSeccion() {
-    return TextStyle(
-      color: const Color(0xFF2E2E2E),
-      fontFamily: semibold,
-      fontSize: 18,
-    );
   }
 }

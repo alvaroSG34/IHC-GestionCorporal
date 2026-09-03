@@ -9,12 +9,14 @@ class Input extends StatelessWidget {
     required this.controlador,
     this.placeholder,
     this.tipoTeclado,
+    this.soloLectura = false,
   });
 
   final String etiqueta;
   final TextEditingController controlador;
   final String? placeholder;
   final TextInputType? tipoTeclado;
+  final bool soloLectura;
 
   @override
   Widget build(BuildContext context) {
@@ -36,6 +38,7 @@ class Input extends StatelessWidget {
           child: TextField(
             controller: controlador,
             keyboardType: tipoTeclado,
+            readOnly: soloLectura,
             style: const TextStyle(
               color: Color(0xFF616161),
               fontFamily: regular,
