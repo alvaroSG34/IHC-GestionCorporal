@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../consts/colors.dart';
 import '../../consts/styles.dart';
 import '../../widgets/barra_inferior.dart';
+import '../../widgets/top_app_bar.dart';
 import '../pacientes/paciente_view.dart';
 
 class HomeView extends StatefulWidget {
@@ -67,8 +68,24 @@ class _PantallaInicio extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Center(
-      child: Text('Bienvenido!', style: TextStyle(fontSize: 24)),
+    return const Column(
+      children: [
+        TopAppBar(titulo: 'Inicio'),
+        Expanded(
+          child: Center(
+            child: Text(
+              'Bienvenido!',
+              textAlign: TextAlign.center,
+              style: TextStyle(
+                color: Colors.black,
+                fontFamily: semibold,
+                fontSize: 17,
+                height: 24 / 17,
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
