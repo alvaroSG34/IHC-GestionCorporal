@@ -10,6 +10,7 @@ class Input extends StatelessWidget {
     this.placeholder,
     this.tipoTeclado,
     this.soloLectura = false,
+    this.unidad,
   });
 
   final String etiqueta;
@@ -17,6 +18,7 @@ class Input extends StatelessWidget {
   final String? placeholder;
   final TextInputType? tipoTeclado;
   final bool soloLectura;
+  final String? unidad;
 
   @override
   Widget build(BuildContext context) {
@@ -47,10 +49,17 @@ class Input extends StatelessWidget {
             ),
             decoration: InputDecoration(
               hintText: placeholder,
+              suffixText: unidad,
               hintStyle: const TextStyle(
                 color: Color(0xFF616161),
                 fontFamily: regular,
                 fontSize: 16,
+              ),
+              suffixStyle: const TextStyle(
+                color: Color(0xFF616161),
+                fontFamily: regular,
+                fontSize: 14,
+                height: 24 / 14,
               ),
               isDense: true,
               contentPadding: const EdgeInsets.all(8),

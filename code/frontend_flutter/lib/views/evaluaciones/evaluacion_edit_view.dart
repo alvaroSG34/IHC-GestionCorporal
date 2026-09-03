@@ -158,46 +158,43 @@ class _EvaluacionEditViewState extends State<EvaluacionEditView> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          const SizedBox(height: 7),
-          Semantics(
-            label: 'Paciente: ${widget.paciente.nombre}',
-            child: const Align(
-              alignment: Alignment.centerLeft,
-              child: SizedBox(
-                width: 153,
-                height: 12,
-                child: DecoratedBox(
-                  decoration: BoxDecoration(
-                    color: Color(0xFFE0E0E0),
-                    borderRadius: BorderRadius.all(Radius.circular(3)),
-                  ),
-                ),
-              ),
+          const SizedBox(height: 8),
+          Text(
+            widget.paciente.nombre,
+            style: const TextStyle(
+              color: Color(0xFF2E2E2E),
+              fontFamily: regular,
+              fontSize: 16,
+              height: 24 / 16,
             ),
           ),
-          const SizedBox(height: 16),
+          const SizedBox(height: 8),
           Input(
             etiqueta: 'Peso',
             controlador: _controladorPeso,
             tipoTeclado: const TextInputType.numberWithOptions(decimal: true),
+            unidad: 'kg',
           ),
           const SizedBox(height: 8),
           Input(
             etiqueta: 'Altura',
             controlador: _controladorAltura,
             tipoTeclado: TextInputType.number,
+            unidad: 'cm',
           ),
           const SizedBox(height: 8),
           Input(
             etiqueta: 'Masa muscular',
             controlador: _controladorMasa,
             tipoTeclado: const TextInputType.numberWithOptions(decimal: true),
+            unidad: '%',
           ),
           const SizedBox(height: 8),
           Input(
             etiqueta: 'IMC',
             controlador: _controladorImc,
             soloLectura: true,
+            unidad: 'kg/m²',
           ),
           const SizedBox(height: 32),
           const Text(
