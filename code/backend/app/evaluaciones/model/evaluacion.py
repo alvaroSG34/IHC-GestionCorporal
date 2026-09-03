@@ -1,5 +1,5 @@
 from datetime import datetime,timezone
-from sqlalchemy import Column,Float,Integer,ForeignKey,DateTime,Text,UniqueConstraint,CheckConstraint
+from sqlalchemy import Column,Float,Integer,ForeignKey,DateTime,Text,UniqueConstraint,CheckConstraint,Boolean
 from sqlalchemy.orm import relationship
 from database import Base
 
@@ -12,6 +12,7 @@ class Evaluacion(Base):
     masa_muscular = Column(Float, nullable=False)
     observacion = Column(Text,nullable=True)
     fecha_registro = Column(DateTime,nullable=False, default=lambda: datetime.now(timezone.utc))
+    esta_activo = Column(Boolean, nullable=False,default=True)
     paciente_id = Column(Integer, ForeignKey("paciente.id"),nullable=False)
 
     __table_args__ = (
