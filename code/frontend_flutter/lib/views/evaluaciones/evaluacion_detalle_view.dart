@@ -6,6 +6,7 @@ import '../../models/evaluacion.dart';
 import '../../models/paciente.dart';
 import '../../widgets/barra_inferior.dart';
 import '../../widgets/top_app_bar.dart';
+import 'evaluacion_edit_view.dart';
 
 class EvaluacionDetalleView extends StatelessWidget {
   const EvaluacionDetalleView({
@@ -35,12 +36,19 @@ class EvaluacionDetalleView extends StatelessWidget {
                 titulo: 'Evaluación',
                 alVolver: () => Navigator.pop(context),
                 textoAccion: 'Editar',
-                alAccion: () {
-                  ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                      content: Text('Edición de evaluación pendiente'),
+                alAccion: () async {
+                  final actualizado = await Navigator.push<bool>(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => EvaluacionEditView(
+                        evaluacion: evaluacion,
+                        paciente: paciente,
+                      ),
                     ),
                   );
+                  if (actualizado == true && context.mounted) {
+                    Navigator.pop(context, true);
+                  }
                 },
               ),
               Expanded(child: _contenido()),

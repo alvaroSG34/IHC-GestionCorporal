@@ -45,8 +45,8 @@ class _EvaluacionViewState extends State<EvaluacionView> {
     if (resultado == true && mounted) setState(_cargarEvaluaciones);
   }
 
-  void _abrirDetalle(Evaluacion evaluacion) {
-    Navigator.push(
+  Future<void> _abrirDetalle(Evaluacion evaluacion) async {
+    final actualizado = await Navigator.push<bool>(
       context,
       MaterialPageRoute(
         builder: (_) => EvaluacionDetalleView(
@@ -55,6 +55,8 @@ class _EvaluacionViewState extends State<EvaluacionView> {
         ),
       ),
     );
+
+    if (actualizado == true && mounted) setState(_cargarEvaluaciones);
   }
 
   @override
