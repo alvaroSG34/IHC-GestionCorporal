@@ -191,7 +191,7 @@ class _PacienteEditViewState extends State<PacienteEditView> {
             child: TextButton(
               onPressed: _confirmarEliminacion,
               style: TextButton.styleFrom(
-                alignment: Alignment.centerLeft,
+                alignment: Alignment.center,
                 foregroundColor: const Color(0xFFDC1A1D),
               ),
               child: const Text(
