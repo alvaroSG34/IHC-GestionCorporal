@@ -3,11 +3,18 @@ import 'package:flutter/material.dart';
 import '../consts/styles.dart';
 
 class TopAppBar extends StatelessWidget {
-  const TopAppBar({super.key, this.titulo, this.alVolver, this.alAccion});
+  const TopAppBar({
+    super.key,
+    this.titulo,
+    this.alVolver,
+    this.alAccion,
+    this.textoAccion,
+  });
 
   final String? titulo;
   final VoidCallback? alVolver;
   final VoidCallback? alAccion;
+  final String? textoAccion;
 
   @override
   Widget build(BuildContext context) {
@@ -47,10 +54,11 @@ class TopAppBar extends StatelessWidget {
             if (muestraAccion) ...[
               if (titulo != null || muestraVolver) const SizedBox(width: 16),
               _AccionCabecera(
-                etiquetaSemantica: 'Agregar',
-                simbolo: '+',
-                tamanoFuente: 28,
+                etiquetaSemantica: textoAccion ?? 'Agregar',
+                simbolo: textoAccion ?? '+',
+                tamanoFuente: textoAccion == null ? 28 : 16,
                 color: const Color(0xFF2E2E2E),
+                ancho: textoAccion == null ? 24 : 60,
                 alTocar: alAccion!,
               ),
             ],
@@ -67,6 +75,7 @@ class _AccionCabecera extends StatelessWidget {
     required this.simbolo,
     required this.tamanoFuente,
     required this.color,
+    this.ancho = 24,
     required this.alTocar,
   });
 
@@ -74,6 +83,7 @@ class _AccionCabecera extends StatelessWidget {
   final String simbolo;
   final double tamanoFuente;
   final Color color;
+  final double ancho;
   final VoidCallback alTocar;
 
   @override
@@ -84,7 +94,7 @@ class _AccionCabecera extends StatelessWidget {
       child: InkWell(
         onTap: alTocar,
         child: SizedBox(
-          width: 24,
+          width: ancho,
           height: 32,
           child: Center(
             child: Text(
