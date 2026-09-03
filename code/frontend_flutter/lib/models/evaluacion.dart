@@ -7,6 +7,7 @@ class Evaluacion {
   final String? observacion;
   final DateTime fechaRegistro;
   final int pacienteId;
+  final bool esta_activo;
 
   Evaluacion({
     required this.id,
@@ -17,6 +18,7 @@ class Evaluacion {
     required this.observacion,
     required this.fechaRegistro,
     required this.pacienteId,
+    required this.esta_activo,
   });
 
   factory Evaluacion.fromJson(Map<String, dynamic> json) {
@@ -29,6 +31,7 @@ class Evaluacion {
       observacion: json['observacion'] as String?,
       fechaRegistro: DateTime.parse(json['fecha_registro'] as String),
       pacienteId: json['paciente_id'] as int,
+      esta_activo: json['esta_activo'] as bool? ?? true,
     );
   }
 
@@ -42,6 +45,7 @@ class Evaluacion {
       'observacion': observacion,
       'fecha_registro': fechaRegistro.toIso8601String(),
       'paciente_id': pacienteId,
+      'esta_activo': esta_activo,
     };
   }
 }
