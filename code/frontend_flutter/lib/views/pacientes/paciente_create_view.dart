@@ -72,11 +72,10 @@ class _PacienteCreateViewState extends State<PacienteCreateView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: blancoplomizo,
       body: SafeArea(
         child: Container(
           decoration: BoxDecoration(
-            color: const Color(0xFFFBFBFB),
+            color: background,
             border: Border.all(color: const Color(0xFFB8B8B8)),
             borderRadius: BorderRadius.circular(18),
           ),

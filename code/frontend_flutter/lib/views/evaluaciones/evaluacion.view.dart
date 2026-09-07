@@ -63,11 +63,11 @@ class _EvaluacionViewState extends State<EvaluacionView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: blancoplomizo,
+      backgroundColor: background,
       body: SafeArea(
         child: Container(
           decoration: BoxDecoration(
-            color: const Color(0xFFFBFBFB),
+            color: background,
             border: Border.all(color: const Color(0xFFC7C7C7)),
             borderRadius: BorderRadius.circular(18),
           ),

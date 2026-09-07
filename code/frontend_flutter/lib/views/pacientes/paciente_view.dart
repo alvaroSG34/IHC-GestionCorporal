@@ -56,7 +56,7 @@ class _PacienteViewState extends State<PacienteView> {
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: const Color(0xFFFBFBFB),
+      color: background,
       child: Column(
         children: [
           TopAppBar(titulo: 'Pacientes', alAccion: _crearPaciente),
