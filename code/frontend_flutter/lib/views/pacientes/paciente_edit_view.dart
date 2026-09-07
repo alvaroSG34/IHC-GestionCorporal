@@ -4,6 +4,7 @@ import '../../consts/colors.dart';
 import '../../consts/styles.dart';
 import '../../models/paciente.dart';
 import '../../services/paciente_service.dart';
+import '../../widgets/boton_guardar.dart';
 import '../../widgets/dialogo_confirmacion.dart';
 import '../../widgets/input.dart';
 import '../../widgets/top_app_bar.dart';
@@ -156,33 +157,10 @@ class _PacienteEditViewState extends State<PacienteEditView> {
           ),
           const SizedBox(height: 32),
           Center(
-            child: SizedBox(
-              width: 138,
-              height: 46,
-              child: ElevatedButton(
-                onPressed: _guardando ? null : _guardarCambios,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFFD1FFD2),
-                  foregroundColor: const Color(0xFF616161),
-                  disabledBackgroundColor: const Color(0xFFD1FFD2),
-                  elevation: 0,
-                  padding: EdgeInsets.zero,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                    side: const BorderSide(color: Color(0xFFD1FFD2)),
-                  ),
-                ),
-                child: _guardando
-                    ? const SizedBox(
-                        width: 18,
-                        height: 18,
-                        child: CircularProgressIndicator(strokeWidth: 2),
-                      )
-                    : const Text(
-                        'Guardar cambios',
-                        style: TextStyle(fontFamily: semibold, fontSize: 15),
-                      ),
-              ),
+            child: BotonGuardar(
+              texto: 'Guardar cambios',
+              alPresionar: _guardando ? null : _guardarCambios,
+              estaCargando: _guardando,
             ),
           ),
           const SizedBox(height: 24),

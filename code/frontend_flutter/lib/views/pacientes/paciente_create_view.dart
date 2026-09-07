@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import '../../consts/colors.dart';
 import '../../consts/styles.dart';
 import '../../services/paciente_service.dart';
+import '../../widgets/boton_guardar.dart';
 import '../../widgets/input.dart';
 import '../../widgets/top_app_bar.dart';
 
@@ -125,33 +126,10 @@ class _PacienteCreateViewState extends State<PacienteCreateView> {
           ),
           const SizedBox(height: 32),
           Center(
-            child: SizedBox(
-              width: 138,
-              height: 46,
-              child: ElevatedButton(
-                onPressed: _guardando ? null : _guardarPaciente,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFFDDFFDF),
-                  foregroundColor: const Color(0xFF616161),
-                  disabledBackgroundColor: const Color(0xFFDDFFDF),
-                  elevation: 0,
-                  padding: EdgeInsets.zero,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                    side: const BorderSide(color: Color(0xFFDDFFDF)),
-                  ),
-                ),
-                child: _guardando
-                    ? const SizedBox(
-                        width: 18,
-                        height: 18,
-                        child: CircularProgressIndicator(strokeWidth: 2),
-                      )
-                    : const Text(
-                        'Guardar',
-                        style: TextStyle(fontFamily: semibold, fontSize: 15),
-                      ),
-              ),
+            child: BotonGuardar(
+              texto: 'Guardar',
+              alPresionar: _guardando ? null : _guardarPaciente,
+              estaCargando: _guardando,
             ),
           ),
         ],

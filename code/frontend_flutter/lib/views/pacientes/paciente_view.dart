@@ -4,6 +4,7 @@ import '../../consts/colors.dart';
 import '../../consts/styles.dart';
 import '../../models/paciente.dart';
 import '../../services/paciente_service.dart';
+import '../../widgets/tarjeta_paciente.dart';
 import '../../widgets/top_app_bar.dart';
 import 'paciente_detalle_view.dart';
 import 'paciente_create_view.dart';
@@ -143,8 +144,8 @@ class _PacienteViewState extends State<PacienteView> {
                               const SizedBox(height: 16),
                           itemBuilder: (contexto, indice) {
                             final paciente = pacientes[indice];
-                            return _TarjetaPaciente(
-                              paciente: paciente,
+                            return TarjetaPaciente(
+                              nombre: paciente.nombre,
                               alTocar: () async {
                                 final actualizado = await Navigator.push<bool>(
                                   contexto,
@@ -168,80 +169,6 @@ class _PacienteViewState extends State<PacienteView> {
             ),
           ),
         ],
-      ),
-    );
-  }
-}
-
-class _TarjetaPaciente extends StatelessWidget {
-  const _TarjetaPaciente({required this.paciente, required this.alTocar});
-
-  final Paciente paciente;
-  final VoidCallback alTocar;
-
-  @override
-  Widget build(BuildContext context) {
-    return Material(
-      color: const Color(0xFFE0E0E0),
-      child: InkWell(
-        onTap: alTocar,
-        child: SizedBox(
-          height: 72,
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 16),
-            child: Row(
-              children: [
-                const SizedBox(
-                  width: 40,
-                  height: 40,
-                  child: DecoratedBox(
-                    decoration: BoxDecoration(
-                      color: Color(0xFFADADAD),
-                      shape: BoxShape.circle,
-                    ),
-                  ),
-                ),
-                const SizedBox(width: 24),
-                Expanded(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        paciente.nombre,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(
-                          color: Color(0xFF2E2E2E),
-                          fontFamily: regular,
-                          fontSize: 16,
-                          height: 24 / 16,
-                        ),
-                      ),
-                      /*
-                      const SizedBox(height: 4),
-                      Text(
-                        '$sexo · $fecha',
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: const TextStyle(
-                          color: Color(0xFF616161),
-                          fontSize: 12,
-                        ),
-                      ),
-                      */
-                    ],
-                  ),
-                ),
-                const Icon(
-                  Icons.chevron_right,
-                  color: Color(0xFF616161),
-                  size: 24,
-                ),
-              ],
-            ),
-          ),
-        ),
       ),
     );
   }

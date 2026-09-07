@@ -32,31 +32,23 @@ class _HomeViewState extends State<HomeView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: blancoplomizo,
+      backgroundColor: background,
       body: SafeArea(
-        child: Container(
-          decoration: BoxDecoration(
-            color: const Color(0xFFFBFBFB),
-            border: Border.all(color: const Color(0xFFC7C7C7)),
-            borderRadius: BorderRadius.circular(18),
-          ),
-          clipBehavior: Clip.antiAlias,
-          child: Column(
-            children: [
-              Expanded(
-                child: IndexedStack(
-                  index: _indiceSeleccionado,
-                  children: _pantallas
-                      .map((pantalla) => SizedBox.expand(child: pantalla))
-                      .toList(),
-                ),
+        child: Column(
+          children: [
+            Expanded(
+              child: IndexedStack(
+                index: _indiceSeleccionado,
+                children: _pantallas
+                    .map((pantalla) => SizedBox.expand(child: pantalla))
+                    .toList(),
               ),
-              BarraInferior(
-                indiceSeleccionado: _indiceSeleccionado,
-                alCambiar: _cambiarPantalla,
-              ),
-            ],
-          ),
+            ),
+            BarraInferior(
+              indiceSeleccionado: _indiceSeleccionado,
+              alCambiar: _cambiarPantalla,
+            ),
+          ],
         ),
       ),
     );
@@ -76,12 +68,7 @@ class _PantallaInicio extends StatelessWidget {
             child: Text(
               'Bienvenido!',
               textAlign: TextAlign.center,
-              style: TextStyle(
-                color: Colors.black,
-                fontFamily: semibold,
-                fontSize: 17,
-                height: 24 / 17,
-              ),
+              style: figmaHeading,
             ),
           ),
         ),
