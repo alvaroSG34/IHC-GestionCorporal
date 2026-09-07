@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../consts/colors.dart';
 import '../consts/styles.dart';
 
 class BarraInferior extends StatelessWidget {
@@ -15,18 +16,15 @@ class BarraInferior extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: 56,
-      color: const Color(0xFFFBFBFB),
+      height: 58,
+      color: background,
       child: Stack(
         children: [
           const Positioned(
             top: 0,
             left: 0,
             right: 0,
-            child: SizedBox(
-              height: 1,
-              child: ColoredBox(color: Color(0xFFC7C7C7)),
-            ),
+            child: SizedBox(height: 1, child: ColoredBox(color: primario)),
           ),
           Padding(
             padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
@@ -74,18 +72,16 @@ class _ElementoNavegacion extends StatelessWidget {
       onTap: alTocar,
       child: SizedBox(
         width: 80,
-        height: 40,
+        height: 42,
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             Container(
-              width: 16,
-              height: 16,
+              width: 18,
+              height: 18,
               decoration: BoxDecoration(
                 shape: BoxShape.circle,
-                color: seleccionado
-                    ? const Color(0xFFADADAD)
-                    : const Color(0xFFE0E0E0),
+                color: seleccionado ? auxiliar : const Color(0xFFE0E0E0),
               ),
             ),
             const SizedBox(height: 8),
@@ -95,13 +91,11 @@ class _ElementoNavegacion extends StatelessWidget {
               softWrap: false,
               overflow: TextOverflow.clip,
               textAlign: TextAlign.center,
-              style: TextStyle(
+              style: figmaCaption.copyWith(
                 color: seleccionado
                     ? const Color(0xFF2E2E2E)
                     : const Color(0xFF616161),
-                fontFamily: seleccionado ? semibold : regular,
-                fontSize: 11,
-                height: 16 / 11,
+                height: 16 / 14,
               ),
             ),
           ],

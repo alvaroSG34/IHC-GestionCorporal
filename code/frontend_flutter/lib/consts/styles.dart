@@ -7,9 +7,9 @@ const medium = 'kreon_medium';
 const light = 'kreon_light';
 
 const TextStyle figmaHeading = TextStyle(
-  fontFamily: regular,
+  fontFamily: bold,
   fontSize: 24,
-  fontWeight: FontWeight.w400,
+  fontWeight: FontWeight.w700,
 );
 
 const TextStyle figmaButton = TextStyle(
