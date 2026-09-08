@@ -6,12 +6,14 @@ from database import get_db
 from app.evaluaciones.model.evaluacion import Evaluacion
 from app.evaluaciones.schema.evaluacion import RegistrarEvaluacion,MostrarEvaluacion,MostrarUltimaEvaluacion,ActualizarEvaluacion
 from app.pacientes.model.paciente import Paciente
+from app.core.dependencies import obtener_usuario_actual
+from app.usuarios.model.usuario import Usuario
 
-router = APIRouter(prefix="/evaluaciones", tags=["Evaluaciones"])
+router = APIRouter(prefix="/evaluaciones", tags=["Evaluaciones"], dependencies = [Depends(obtener_usuario_actual)])
 
 @router.post("/", response_model= MostrarEvaluacion,status_code=status.HTTP_201_CREATED)
-def registrar_evaluacion(datos:RegistrarEvaluacion,db:Session=Depends(get_db)):
-    existe_paciente = db.query(Paciente).filter(Paciente.id==datos.paciente_id,Paciente.esta_activo==True).first()
+def registrar_evaluacion(datos:RegistrarEvaluacion,db:Session=Depends(get_db),usuario_actual:Usuario=Depends(obtener_usuario_actual)):
+    existe_paciente = db.query(Paciente).filter(Paciente.id==datos.paciente_id,Paciente.esta_activo==True,Paciente.usuario_id==usuario_actual.id).first()
     if existe_paciente is None:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
@@ -55,8 +57,8 @@ def registrar_evaluacion(datos:RegistrarEvaluacion,db:Session=Depends(get_db)):
         )
 
 @router.get("/{evaluacion_id}",response_model=MostrarEvaluacion)
-def mostrar_evaluacion(evaluacion_id:int , db:Session=Depends(get_db)):
-    evaluacion_obtenida = db.query(Evaluacion).filter(Evaluacion.id==evaluacion_id, Evaluacion.esta_activo==True).first()
+def mostrar_evaluacion(evaluacion_id:int , db:Session=Depends(get_db),usuario_actual:Usuario=Depends(obtener_usuario_actual)):
+    evaluacion_obtenida = db.query(Evaluacion).join(Paciente).filter(Evaluacion.id==evaluacion_id, Evaluacion.esta_activo==True,Paciente.usuario_id==usuario_actual.id).first()
     if evaluacion_obtenida is None:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
@@ -65,8 +67,8 @@ def mostrar_evaluacion(evaluacion_id:int , db:Session=Depends(get_db)):
     return evaluacion_obtenida
     
 @router.get("/paciente/{paciente_id}",response_model=List[MostrarEvaluacion])
-def mostrar_evaluaciones_de_paciente(paciente_id:int,db:Session=Depends(get_db)):
-    existe_paciente = db.query(Paciente).filter(Paciente.id==paciente_id,Paciente.esta_activo==True).first()
+def mostrar_evaluaciones_de_paciente(paciente_id:int,db:Session=Depends(get_db),usuario_actual:Usuario=Depends(obtener_usuario_actual)):
+    existe_paciente = db.query(Paciente).filter(Paciente.id==paciente_id,Paciente.esta_activo==True,Paciente.usuario_id==usuario_actual.id).first()
     if existe_paciente is None:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
@@ -75,9 +77,15 @@ def mostrar_evaluaciones_de_paciente(paciente_id:int,db:Session=Depends(get_db))
     evaluaciones_del_paciente_obtenidas=db.query(Evaluacion).filter(Evaluacion.paciente_id==paciente_id,Evaluacion.esta_activo==True).order_by(Evaluacion.fecha_registro.desc()).all()
     return evaluaciones_del_paciente_obtenidas 
 
+@router.get("/evaluaciones/",response_model=List[MostrarEvaluacion])
+def mostrar_evaluaciones(db:Session=Depends(get_db),usuario_actual:Usuario=Depends(obtener_usuario_actual)):
+    evaluaciones_obtenidas=db.query(Evaluacion).join(Paciente).filter(Evaluacion.esta_activo==True,Paciente.usuario_id==usuario_actual.id).order_by(Evaluacion.fecha_registro.asc()).all()
+    return evaluaciones_obtenidas 
+
+
 @router.get("/paciente/{paciente_id}/ultimaevaluacion",response_model=MostrarUltimaEvaluacion)
-def mostrar_ultima_evaluacion_de_paciente(paciente_id:int,db:Session=Depends(get_db)):
-    existe_paciente = db.query(Paciente).filter(Paciente.id==paciente_id,Paciente.esta_activo==True).first()
+def mostrar_ultima_evaluacion_de_paciente(paciente_id:int,db:Session=Depends(get_db),usuario_actual:Usuario=Depends(obtener_usuario_actual)):
+    existe_paciente = db.query(Paciente).filter(Paciente.id==paciente_id,Paciente.esta_activo==True,Paciente.usuario_id==usuario_actual.id).first()
     if existe_paciente is None:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
@@ -92,8 +100,8 @@ def mostrar_ultima_evaluacion_de_paciente(paciente_id:int,db:Session=Depends(get
     return ultima_evaluacion_del_paciente_obtenida
 
 @router.put("/{evaluacion_id}",response_model=MostrarEvaluacion)
-def actualizar_evaluacion(evaluacion_id:int,datos:ActualizarEvaluacion,db:Session=Depends(get_db)):
-    evaluacion_a_actualizar = db.query(Evaluacion).filter(Evaluacion.id==evaluacion_id,Evaluacion.esta_activo==True).first()
+def actualizar_evaluacion(evaluacion_id:int,datos:ActualizarEvaluacion,db:Session=Depends(get_db),usuario_actual:Usuario=Depends(obtener_usuario_actual)):
+    evaluacion_a_actualizar = db.query(Evaluacion).join(Paciente).filter(Evaluacion.id==evaluacion_id,Evaluacion.esta_activo==True,Paciente.usuario_id==usuario_actual.id).first()
     if evaluacion_a_actualizar is None:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
@@ -104,7 +112,7 @@ def actualizar_evaluacion(evaluacion_id:int,datos:ActualizarEvaluacion,db:Sessio
                 status_code=status.HTTP_404_NOT_FOUND,
                 detail="paciente no encontrado",
             )
-    existe_paciente = db.query(Paciente).filter(Paciente.id==datos.paciente_id,Paciente.esta_activo==True).first()
+    existe_paciente = db.query(Paciente).filter(Paciente.id==datos.paciente_id,Paciente.esta_activo==True,Paciente.usuario_id==usuario_actual.id).first()
     if existe_paciente is None:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
@@ -141,8 +149,8 @@ def actualizar_evaluacion(evaluacion_id:int,datos:ActualizarEvaluacion,db:Sessio
                 detail="Error al actualizar evaluacion"
             )
 @router.delete("/{evaluacion_id}",status_code=status.HTTP_200_OK)
-def eliminar_evaluacion(evaluacion_id:int,db:Session=Depends(get_db)):
-    evaluacion_a_eliminar = db.query(Evaluacion).filter(Evaluacion.id==evaluacion_id, Evaluacion.esta_activo==True).first()
+def eliminar_evaluacion(evaluacion_id:int,db:Session=Depends(get_db),usuario_actual:Usuario=Depends(obtener_usuario_actual)):
+    evaluacion_a_eliminar = db.query(Evaluacion).join(Paciente).filter(Evaluacion.id==evaluacion_id, Evaluacion.esta_activo==True,Paciente.usuario_id==usuario_actual.id).first()
     if evaluacion_a_eliminar is None:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
