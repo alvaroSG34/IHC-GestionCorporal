@@ -26,6 +26,31 @@ class _EvaluacionCreateViewState extends State<EvaluacionCreateView> {
 
   bool _guardando = false;
 
+  @override
+  void initState() {
+    super.initState();
+    _controladorPeso.addListener(_calcularImc);
+    _controladorAltura.addListener(_calcularImc);
+  }
+
+  void _calcularImc() {
+    final peso = double.tryParse(
+      _controladorPeso.text.trim().replaceAll(',', '.'),
+    );
+    final alturaCm = double.tryParse(
+      _controladorAltura.text.trim().replaceAll(',', '.'),
+    );
+
+    if (peso == null || peso <= 0 || alturaCm == null || alturaCm <= 0) {
+      _controladorImc.clear();
+      return;
+    }
+
+    final alturaMetros = alturaCm / 100;
+    final imc = peso / (alturaMetros * alturaMetros);
+    _controladorImc.text = imc.toStringAsFixed(1);
+  }
+
   Future<void> _guardarEvaluacion() async {
     final peso = double.tryParse(
       _controladorPeso.text.trim().replaceAll(',', '.'),
@@ -78,6 +103,8 @@ class _EvaluacionCreateViewState extends State<EvaluacionCreateView> {
 
   @override
   void dispose() {
+    _controladorPeso.removeListener(_calcularImc);
+    _controladorAltura.removeListener(_calcularImc);
     _controladorPeso.dispose();
     _controladorAltura.dispose();
     _controladorMasa.dispose();

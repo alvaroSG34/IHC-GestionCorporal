@@ -175,6 +175,6 @@ class _EvaluacionViewState extends State<EvaluacionView> {
     ];
     final hora = fecha.hour.toString().padLeft(2, '0');
     final minuto = fecha.minute.toString().padLeft(2, '0');
-    return '${fecha.day} ${meses[fecha.month - 1]} ${fecha.year} Â· $hora:$minuto';
+    return '${fecha.day} ${meses[fecha.month - 1]} ${fecha.year} $hora:$minuto';
   }
 }
