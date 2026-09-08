@@ -5,8 +5,9 @@ from database import get_db
 from app.pacientes.model.paciente import Paciente
 from app.pacientes.schema.paciente import RegistrarPaciente,MostrarPaciente,ActualizarPaciente
 from datetime import date
+from app.core.dependencies import obtener_usuario_actual
 
-router = APIRouter(prefix="/pacientes", tags=["Pacientes"])
+router = APIRouter(prefix="/pacientes", tags=["Pacientes"], dependencies = [Depends(obtener_usuario_actual)])
 
 @router.post("/", response_model=MostrarPaciente,status_code=status.HTTP_201_CREATED)
 def registrar_paciente(datos: RegistrarPaciente,db: Session = Depends(get_db)):

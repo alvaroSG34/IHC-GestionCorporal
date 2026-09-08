@@ -6,8 +6,9 @@ from database import get_db
 from app.evaluaciones.model.evaluacion import Evaluacion
 from app.evaluaciones.schema.evaluacion import RegistrarEvaluacion,MostrarEvaluacion,MostrarUltimaEvaluacion,ActualizarEvaluacion
 from app.pacientes.model.paciente import Paciente
+from app.core.dependencies import obtener_usuario_actual
 
-router = APIRouter(prefix="/evaluaciones", tags=["Evaluaciones"])
+router = APIRouter(prefix="/evaluaciones", tags=["Evaluaciones"], dependencies = [Depends(obtener_usuario_actual)])
 
 @router.post("/", response_model= MostrarEvaluacion,status_code=status.HTTP_201_CREATED)
 def registrar_evaluacion(datos:RegistrarEvaluacion,db:Session=Depends(get_db)):
@@ -74,6 +75,12 @@ def mostrar_evaluaciones_de_paciente(paciente_id:int,db:Session=Depends(get_db))
         )
     evaluaciones_del_paciente_obtenidas=db.query(Evaluacion).filter(Evaluacion.paciente_id==paciente_id,Evaluacion.esta_activo==True).order_by(Evaluacion.fecha_registro.desc()).all()
     return evaluaciones_del_paciente_obtenidas 
+
+@router.get("/evaluaciones/",response_model=List[MostrarEvaluacion])
+def mostrar_evaluaciones(db:Session=Depends(get_db)):
+    evaluaciones_obtenidas=db.query(Evaluacion).filter(Evaluacion.esta_activo==True).order_by(Evaluacion.fecha_registro.asc()).all()
+    return evaluaciones_obtenidas 
+
 
 @router.get("/paciente/{paciente_id}/ultimaevaluacion",response_model=MostrarUltimaEvaluacion)
 def mostrar_ultima_evaluacion_de_paciente(paciente_id:int,db:Session=Depends(get_db)):
