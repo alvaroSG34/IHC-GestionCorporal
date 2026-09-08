@@ -5,23 +5,33 @@ import '../../consts/styles.dart';
 import '../../widgets/barra_inferior.dart';
 import '../../widgets/top_app_bar.dart';
 import '../pacientes/paciente_view.dart';
+import '../perfil/perfil_view.dart';
 
 class HomeView extends StatefulWidget {
-  const HomeView({super.key});
+  const HomeView({super.key, this.indiceInicial = 0});
+
+  final int indiceInicial;
 
   @override
   State<HomeView> createState() => _HomeViewState();
 }
 
 class _HomeViewState extends State<HomeView> {
-  int _indiceSeleccionado = 0;
+  late int _indiceSeleccionado;
 
   final List<Widget> _pantallas = const [
     _PantallaInicio(),
     PacienteView(),
-    _PantallaVacia(nombre: 'Evaluaciones'),
-    _PantallaVacia(nombre: 'Más'),
+    PerfilView(),
   ];
+
+  @override
+  void initState() {
+    super.initState();
+    _indiceSeleccionado = widget.indiceInicial
+        .clamp(0, _pantallas.length - 1)
+        .toInt();
+  }
 
   void _cambiarPantalla(int indice) {
     setState(() {
@@ -73,22 +83,6 @@ class _PantallaInicio extends StatelessWidget {
           ),
         ),
       ],
-    );
-  }
-}
-
-class _PantallaVacia extends StatelessWidget {
-  const _PantallaVacia({required this.nombre});
-
-  final String nombre;
-
-  @override
-  Widget build(BuildContext context) {
-    return Center(
-      child: Text(
-        nombre,
-        style: TextStyle(color: plomo, fontFamily: regular, fontSize: 18),
-      ),
     );
   }
 }

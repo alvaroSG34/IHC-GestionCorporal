@@ -8,6 +8,7 @@ import '../../services/evaluacion_service.dart';
 import '../../widgets/barra_inferior.dart';
 import '../../widgets/tarjeta_evaluacion.dart';
 import '../../widgets/top_app_bar.dart';
+import '../home_view/home_view.dart';
 import 'evaluacion_create_view.dart';
 import 'evaluacion_detalle_view.dart';
 
@@ -81,9 +82,18 @@ class _EvaluacionViewState extends State<EvaluacionView> {
               ),
               Expanded(child: _contenido()),
               BarraInferior(
-                indiceSeleccionado: 2,
+                indiceSeleccionado: 1,
                 alCambiar: (indice) {
-                  if (indice == 2) Navigator.pop(context);
+                  if (indice == 1) {
+                    Navigator.pop(context);
+                    return;
+                  }
+                  Navigator.of(context).pushAndRemoveUntil(
+                    MaterialPageRoute(
+                      builder: (_) => HomeView(indiceInicial: indice),
+                    ),
+                    (route) => false,
+                  );
                 },
               ),
             ],

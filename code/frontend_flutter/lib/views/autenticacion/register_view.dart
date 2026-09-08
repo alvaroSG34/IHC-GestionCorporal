@@ -82,7 +82,10 @@ class _RegisterViewState extends State<RegisterView> {
           clinica: clinica,
         ),
       );
-      await SessionService().guardarToken(respuesta.accessToken);
+      await SessionService().guardarSesion(
+        token: respuesta.accessToken,
+        usuario: respuesta.usuario,
+      );
       if (!mounted) return;
       Navigator.of(context).pushAndRemoveUntil(
         MaterialPageRoute(builder: (_) => const HomeView()),

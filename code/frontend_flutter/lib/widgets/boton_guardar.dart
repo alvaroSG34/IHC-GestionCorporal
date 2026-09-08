@@ -9,11 +9,15 @@ class BotonGuardar extends StatelessWidget {
     required this.texto,
     required this.alPresionar,
     this.estaCargando = false,
+    this.colorFondo = auxiliar,
+    this.colorTexto = const Color(0xFF616161),
   });
 
   final String texto;
   final VoidCallback? alPresionar;
   final bool estaCargando;
+  final Color colorFondo;
+  final Color colorTexto;
 
   @override
   Widget build(BuildContext context) {
@@ -23,10 +27,10 @@ class BotonGuardar extends StatelessWidget {
       width: 138,
       height: 46,
       child: Material(
-        color: auxiliar,
+        color: colorFondo,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10),
-          side: const BorderSide(color: auxiliar),
+          side: BorderSide(color: colorFondo),
         ),
         child: InkWell(
           borderRadius: BorderRadius.circular(10),
@@ -38,10 +42,7 @@ class BotonGuardar extends StatelessWidget {
                     height: 18,
                     child: CircularProgressIndicator(strokeWidth: 2),
                   )
-                : Text(
-                    texto,
-                    style: figmaButton.copyWith(color: const Color(0xFF616161)),
-                  ),
+                : Text(texto, style: figmaButton.copyWith(color: colorTexto)),
           ),
         ),
       ),

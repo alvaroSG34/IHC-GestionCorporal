@@ -43,7 +43,10 @@ class _LoginViewState extends State<LoginView> {
       final respuesta = await AuthService().login(
         LoginRequest(correoElectronico: correo, contrasena: contrasena),
       );
-      await SessionService().guardarToken(respuesta.accessToken);
+      await SessionService().guardarSesion(
+        token: respuesta.accessToken,
+        usuario: respuesta.usuario,
+      );
       if (!mounted) return;
       Navigator.of(context).pushAndRemoveUntil(
         MaterialPageRoute(builder: (_) => const HomeView()),

@@ -7,6 +7,7 @@ import '../../services/paciente_service.dart';
 import '../../widgets/barra_inferior.dart';
 import '../../widgets/top_app_bar.dart';
 import '../evaluaciones/evaluacion.view.dart';
+import '../home_view/home_view.dart';
 import 'paciente_edit_view.dart';
 
 class PacienteDetalleView extends StatelessWidget {
@@ -64,7 +65,16 @@ class PacienteDetalleView extends StatelessWidget {
               BarraInferior(
                 indiceSeleccionado: 1,
                 alCambiar: (indice) {
-                  if (indice == 1) Navigator.pop(context);
+                  if (indice == 1) {
+                    Navigator.pop(context);
+                    return;
+                  }
+                  Navigator.of(context).pushAndRemoveUntil(
+                    MaterialPageRoute(
+                      builder: (_) => HomeView(indiceInicial: indice),
+                    ),
+                    (route) => false,
+                  );
                 },
               ),
             ],
