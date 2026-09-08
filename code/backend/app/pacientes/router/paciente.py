@@ -6,11 +6,12 @@ from app.pacientes.model.paciente import Paciente
 from app.pacientes.schema.paciente import RegistrarPaciente,MostrarPaciente,ActualizarPaciente
 from datetime import date
 from app.core.dependencies import obtener_usuario_actual
+from app.usuarios.model.usuario import Usuario
 
 router = APIRouter(prefix="/pacientes", tags=["Pacientes"], dependencies = [Depends(obtener_usuario_actual)])
 
 @router.post("/", response_model=MostrarPaciente,status_code=status.HTTP_201_CREATED)
-def registrar_paciente(datos: RegistrarPaciente,db: Session = Depends(get_db)):
+def registrar_paciente(datos: RegistrarPaciente,db: Session = Depends(get_db),usuario_actual:Usuario=Depends(obtener_usuario_actual)):
     if(datos.nombre == "" or datos.fecha_nacimiento >= date.today()):
         raise HTTPException(
             status_code=status.HTTP_400_BAD_REQUEST, 
@@ -20,7 +21,8 @@ def registrar_paciente(datos: RegistrarPaciente,db: Session = Depends(get_db)):
         nombre=datos.nombre,
         sexo=datos.sexo,
         fecha_nacimiento=datos.fecha_nacimiento,
-        telefono=datos.telefono
+        telefono=datos.telefono,
+        usuario_id=usuario_actual.id
         )
     try:
         db.add(paciente_a_registrar)
@@ -35,8 +37,8 @@ def registrar_paciente(datos: RegistrarPaciente,db: Session = Depends(get_db)):
         )
 
 @router.get("/{paciente_id}",response_model=MostrarPaciente)
-def mostrar_paciente(paciente_id:int,db:Session = Depends(get_db)):
-    paciente_obtenido = db.query(Paciente).filter(Paciente.id == paciente_id,Paciente.esta_activo == True).first()
+def mostrar_paciente(paciente_id:int,db:Session = Depends(get_db),usuario_actual:Usuario=Depends(obtener_usuario_actual)):
+    paciente_obtenido = db.query(Paciente).filter(Paciente.id == paciente_id,Paciente.esta_activo == True,Paciente.usuario_id == usuario_actual.id).first()
     if paciente_obtenido is None:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND, 
@@ -45,13 +47,13 @@ def mostrar_paciente(paciente_id:int,db:Session = Depends(get_db)):
     return paciente_obtenido
 
 @router.get("/",response_model=List[MostrarPaciente])
-def mostrar_pacientes(db:Session = Depends(get_db)):
-    pacientes_obtenidos = db.query(Paciente).filter(Paciente.esta_activo == True).all() 
+def mostrar_pacientes(db:Session = Depends(get_db),usuario_actual:Usuario=Depends(obtener_usuario_actual)):
+    pacientes_obtenidos = db.query(Paciente).filter(Paciente.esta_activo == True,Paciente.usuario_id==usuario_actual.id).all() 
     return pacientes_obtenidos
 
 @router.put("/{paciente_id}",response_model=ActualizarPaciente)
-def actualizar_paciente(paciente_id:int,datos:ActualizarPaciente,db:Session = Depends(get_db)):
-    paciente_a_actualizar = mostrar_paciente(paciente_id,db)
+def actualizar_paciente(paciente_id:int,datos:ActualizarPaciente,db:Session = Depends(get_db),usuario_actual:Usuario=Depends(obtener_usuario_actual)):
+    paciente_a_actualizar = mostrar_paciente(paciente_id,db,usuario_actual)
     if paciente_a_actualizar is None:
         raise HTTPException(
             status_code=status.HTTP_404_NOT_FOUND,
@@ -78,8 +80,8 @@ def actualizar_paciente(paciente_id:int,datos:ActualizarPaciente,db:Session = De
         )
 
 @router.delete("/{paciente_id}",status_code = status.HTTP_200_OK)
-def eliminar_paciente(paciente_id:int,db:Session =Depends(get_db)):
-    paciente_a_eliminar = db.query(Paciente).filter(Paciente.id == paciente_id and Paciente.esta_activo == True).first()
+def eliminar_paciente(paciente_id:int,db:Session =Depends(get_db),usuario_actual:Usuario=Depends(obtener_usuario_actual)):
+    paciente_a_eliminar = db.query(Paciente).filter(Paciente.id == paciente_id,Paciente.esta_activo == True,Paciente.usuario_id==usuario_actual.id).first()
     if paciente_a_eliminar is None:
         raise HTTPException(
             status_code =status.HTTP_404_NOT_FOUND,

@@ -1,4 +1,5 @@
 from sqlalchemy import Column,String,Date,Integer,Boolean
+from sqlalchemy.orm import relationship
 from database import Base
 
 class Usuario(Base):
@@ -10,5 +11,9 @@ class Usuario(Base):
     telefono = Column(String,nullable=True)
     profesion = Column(String,nullable=False)
     clinica = Column(String,nullable=False)
+
+    #relacion con paciente
+    pacientes = relationship("Paciente", back_populates="usuario")
+
     
 

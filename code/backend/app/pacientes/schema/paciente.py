@@ -20,6 +20,7 @@ class MostrarPaciente(BaseModel):
     sexo: Literal["M","F"]
     fecha_nacimiento:date
     telefono:Optional[str]
+    usuario_id:int 
 
     class Config:
         from_attributes = True    
