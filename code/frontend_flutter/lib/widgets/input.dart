@@ -15,6 +15,7 @@ class Input extends StatelessWidget {
     this.nodoFoco,
     this.alTocar,
     this.iconoFinal,
+    this.ocultarTexto = false,
   });
 
   final String etiqueta;
@@ -27,6 +28,7 @@ class Input extends StatelessWidget {
   final FocusNode? nodoFoco;
   final VoidCallback? alTocar;
   final IconData? iconoFinal;
+  final bool ocultarTexto;
 
   @override
   Widget build(BuildContext context) {
@@ -47,6 +49,9 @@ class Input extends StatelessWidget {
             focusNode: nodoFoco,
             keyboardType: tipoTeclado,
             readOnly: soloLectura,
+            obscureText: ocultarTexto,
+            enableSuggestions: !ocultarTexto,
+            autocorrect: !ocultarTexto,
             onTap: alTocar,
             style: const TextStyle(
               color: Color(0xFF616161),
