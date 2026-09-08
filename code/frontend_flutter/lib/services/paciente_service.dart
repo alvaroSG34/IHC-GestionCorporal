@@ -2,12 +2,17 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import '../consts/api_constants.dart';
 import '../models/paciente.dart';
+import 'session_service.dart';
 
 class PacienteService {
+  Future<Map<String, String>> _encabezados() {
+    return SessionService().encabezadosAutenticados();
+  }
+
   Future<Paciente> getPaciente(int pacienteId) async {
     final response = await http.get(
       Uri.parse('$baseUrl/pacientes/$pacienteId'),
-      headers: {'Content-Type': 'application/json'},
+      headers: await _encabezados(),
     );
 
     if (response.statusCode == 200) {
@@ -22,7 +27,7 @@ class PacienteService {
   Future<Map<String, dynamic>?> getUltimaEvaluacion(int pacienteId) async {
     final response = await http.get(
       Uri.parse('$baseUrl/evaluaciones/paciente/$pacienteId/ultimaevaluacion'),
-      headers: {'Content-Type': 'application/json'},
+      headers: await _encabezados(),
     );
 
     if (response.statusCode == 200) {
@@ -41,7 +46,7 @@ class PacienteService {
   Future<List<Paciente>> getPacientes() async {
     final response = await http.get(
       Uri.parse('$baseUrl/pacientes/'),
-      headers: {'Content-Type': 'application/json'},
+      headers: await _encabezados(),
     );
 
     if (response.statusCode == 200) {
@@ -63,7 +68,7 @@ class PacienteService {
   }) async {
     final response = await http.post(
       Uri.parse('$baseUrl/pacientes/'),
-      headers: {'Content-Type': 'application/json'},
+      headers: await _encabezados(),
       body: jsonEncode({
         'nombre': nombre,
         'sexo': sexo,
@@ -88,7 +93,7 @@ class PacienteService {
   }) async {
     final response = await http.put(
       Uri.parse('$baseUrl/pacientes/$pacienteId'),
-      headers: {'Content-Type': 'application/json'},
+      headers: await _encabezados(),
       body: jsonEncode({
         'nombre': nombre,
         'sexo': sexo,
@@ -105,7 +110,7 @@ class PacienteService {
   Future<void> deletePaciente(int pacienteId) async {
     final response = await http.delete(
       Uri.parse('$baseUrl/pacientes/$pacienteId'),
-      headers: {'Content-Type': 'application/json'},
+      headers: await _encabezados(),
     );
 
     if (response.statusCode != 200) {
