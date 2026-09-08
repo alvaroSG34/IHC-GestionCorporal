@@ -2,30 +2,56 @@ import 'package:flutter/material.dart';
 
 import '../../consts/colors.dart';
 import '../../consts/styles.dart';
+import '../../models/evaluacion.dart';
 import '../../models/paciente.dart';
 import '../../services/evaluacion_service.dart';
+import '../../widgets/dialogo_confirmacion.dart';
 import '../../widgets/input.dart';
 import '../../widgets/top_app_bar.dart';
 
-class EvaluacionCreateView extends StatefulWidget {
-  const EvaluacionCreateView({super.key, required this.paciente});
+class EvaluacionEditView extends StatefulWidget {
+  const EvaluacionEditView({
+    super.key,
+    required this.evaluacion,
+    required this.paciente,
+  });
 
+  final Evaluacion evaluacion;
   final Paciente paciente;
 
   @override
-  State<EvaluacionCreateView> createState() => _EvaluacionCreateViewState();
+  State<EvaluacionEditView> createState() => _EvaluacionEditViewState();
 }
 
-class _EvaluacionCreateViewState extends State<EvaluacionCreateView> {
-  final _controladorPeso = TextEditingController();
-  final _controladorAltura = TextEditingController();
-  final _controladorMasa = TextEditingController();
-  final _controladorImc = TextEditingController();
-  final _controladorObservacion = TextEditingController();
-
+class _EvaluacionEditViewState extends State<EvaluacionEditView> {
+  late final TextEditingController _controladorPeso;
+  late final TextEditingController _controladorAltura;
+  late final TextEditingController _controladorMasa;
+  late final TextEditingController _controladorImc;
+  late final TextEditingController _controladorObservacion;
   bool _guardando = false;
 
-  Future<void> _guardarEvaluacion() async {
+  @override
+  void initState() {
+    super.initState();
+    _controladorPeso = TextEditingController(
+      text: widget.evaluacion.peso.toString(),
+    );
+    _controladorAltura = TextEditingController(
+      text: widget.evaluacion.altura.toString(),
+    );
+    _controladorMasa = TextEditingController(
+      text: widget.evaluacion.masa_muscular.toString(),
+    );
+    _controladorImc = TextEditingController(
+      text: widget.evaluacion.imc.toString(),
+    );
+    _controladorObservacion = TextEditingController(
+      text: widget.evaluacion.observacion ?? '',
+    );
+  }
+
+  Future<void> _guardarCambios() async {
     final peso = double.tryParse(
       _controladorPeso.text.trim().replaceAll(',', '.'),
     );
@@ -50,7 +76,8 @@ class _EvaluacionCreateViewState extends State<EvaluacionCreateView> {
     setState(() => _guardando = true);
 
     try {
-      await EvaluacionService().createEvaluacion(
+      await EvaluacionService().updateEvaluacion(
+        evaluacionId: widget.evaluacion.id,
         paciente: widget.paciente.id,
         altura: altura,
         peso: peso,
@@ -59,13 +86,27 @@ class _EvaluacionCreateViewState extends State<EvaluacionCreateView> {
             ? null
             : _controladorObservacion.text.trim(),
       );
-
-      if (!mounted) return;
-      Navigator.pop(context, true);
+      if (mounted) Navigator.pop(context, true);
     } catch (error) {
       if (!mounted) return;
       setState(() => _guardando = false);
-      _mostrarMensaje('Error al guardar la evaluación: $error');
+      _mostrarMensaje('Error: $error');
+    }
+  }
+
+  Future<void> _eliminarEvaluacion() async {
+    final confirmar = await DialogoConfirmacion.mostrar(
+      context,
+      titulo: 'Eliminar evaluación',
+      mensaje: '¿Deseas eliminar esta evaluación?',
+    );
+    if (!confirmar || !mounted) return;
+
+    try {
+      await EvaluacionService().deleteEvaluacion(widget.evaluacion.id);
+      if (mounted) Navigator.pop(context, true);
+    } catch (error) {
+      if (mounted) _mostrarMensaje('Error: $error');
     }
   }
 
@@ -100,7 +141,7 @@ class _EvaluacionCreateViewState extends State<EvaluacionCreateView> {
           child: Column(
             children: [
               TopAppBar(
-                titulo: 'Nueva evaluación',
+                titulo: 'Editar evaluación',
                 alVolver: () => Navigator.pop(context),
               ),
               Expanded(child: _formulario()),
@@ -201,16 +242,16 @@ class _EvaluacionCreateViewState extends State<EvaluacionCreateView> {
               width: 138,
               height: 46,
               child: ElevatedButton(
-                onPressed: _guardando ? null : _guardarEvaluacion,
+                onPressed: _guardando ? null : _guardarCambios,
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFFDDFFDF),
+                  backgroundColor: const Color(0xFFD1FFD2),
                   foregroundColor: const Color(0xFF616161),
-                  disabledBackgroundColor: const Color(0xFFDDFFDF),
+                  disabledBackgroundColor: const Color(0xFFD1FFD2),
                   elevation: 0,
                   padding: EdgeInsets.zero,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10),
-                    side: const BorderSide(color: Color(0xFFDDFFDF)),
+                    side: const BorderSide(color: Color(0xFFD1FFD2)),
                   ),
                 ),
                 child: _guardando
@@ -220,9 +261,24 @@ class _EvaluacionCreateViewState extends State<EvaluacionCreateView> {
                         child: CircularProgressIndicator(strokeWidth: 2),
                       )
                     : const Text(
-                        'Guardar',
+                        'Guardar cambios',
                         style: TextStyle(fontFamily: semibold, fontSize: 15),
                       ),
+              ),
+            ),
+          ),
+          const SizedBox(height: 8),
+          SizedBox(
+            height: 46,
+            child: TextButton(
+              onPressed: _eliminarEvaluacion,
+              style: TextButton.styleFrom(
+                alignment: Alignment.center,
+                foregroundColor: const Color(0xFFDC1A1D),
+              ),
+              child: const Text(
+                'Eliminar evaluación',
+                style: TextStyle(fontFamily: regular, fontSize: 16),
               ),
             ),
           ),

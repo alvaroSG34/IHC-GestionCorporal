@@ -4,6 +4,7 @@ class Paciente {
   final String sexo;
   final DateTime fechaNacimiento;
   final String? telefono;
+  final bool esta_activo;
 
   Paciente({
     required this.id,
@@ -11,6 +12,7 @@ class Paciente {
     required this.sexo,
     required this.fechaNacimiento,
     this.telefono,
+    required this.esta_activo,
   });
 
   factory Paciente.fromJson(Map<String, dynamic> json) {
@@ -20,6 +22,7 @@ class Paciente {
       sexo: json['sexo'] as String,
       fechaNacimiento: DateTime.parse(json['fecha_nacimiento'] as String),
       telefono: json['telefono'] as String?,
+      esta_activo: json['esta_activo'] as bool? ?? true,
     );
   }
 
@@ -30,6 +33,7 @@ class Paciente {
       'sexo': sexo,
       'fecha_nacimiento': fechaNacimiento.toIso8601String(),
       'telefono': telefono,
+      'esta_activo': esta_activo,
     };
   }
 }

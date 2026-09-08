@@ -1,4 +1,4 @@
-from pydantic import BaseModel,field_validator
+from pydantic import BaseModel
 from datetime import date
 from typing import Optional,Literal
 
@@ -20,6 +20,7 @@ class MostrarPaciente(BaseModel):
     sexo: Literal["M","F"]
     fecha_nacimiento:date
     telefono:Optional[str]
+    usuario_id:int 
 
     class Config:
         from_attributes = True    

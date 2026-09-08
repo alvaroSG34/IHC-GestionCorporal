@@ -2,26 +2,40 @@ import 'package:flutter/material.dart';
 
 import '../../consts/colors.dart';
 import '../../consts/styles.dart';
+import '../../models/paciente.dart';
 import '../../services/paciente_service.dart';
+import '../../widgets/dialogo_confirmacion.dart';
 import '../../widgets/input.dart';
 import '../../widgets/top_app_bar.dart';
 
-class PacienteCreateView extends StatefulWidget {
-  const PacienteCreateView({super.key});
+class PacienteEditView extends StatefulWidget {
+  const PacienteEditView({super.key, required this.paciente});
+
+  final Paciente paciente;
 
   @override
-  State<PacienteCreateView> createState() => _PacienteCreateViewState();
+  State<PacienteEditView> createState() => _PacienteEditViewState();
 }
 
-class _PacienteCreateViewState extends State<PacienteCreateView> {
-  final _cNombre = TextEditingController();
-  final _cTelefono = TextEditingController();
-  final _cFecha = TextEditingController();
-
-  String _sexo = 'M';
+class _PacienteEditViewState extends State<PacienteEditView> {
+  late final TextEditingController _cNombre;
+  late final TextEditingController _cTelefono;
+  late final TextEditingController _cFecha;
+  late String _sexo;
   bool _guardando = false;
 
-  Future<void> _guardarPaciente() async {
+  @override
+  void initState() {
+    super.initState();
+    _cNombre = TextEditingController(text: widget.paciente.nombre);
+    _cTelefono = TextEditingController(text: widget.paciente.telefono ?? '');
+    _cFecha = TextEditingController(
+      text: widget.paciente.fechaNacimiento.toIso8601String().split('T').first,
+    );
+    _sexo = widget.paciente.sexo;
+  }
+
+  Future<void> _guardarCambios() async {
     if (_cNombre.text.trim().isEmpty || _cFecha.text.trim().isEmpty) {
       _mostrarMensaje('Completa nombre y fecha');
       return;
@@ -36,7 +50,8 @@ class _PacienteCreateViewState extends State<PacienteCreateView> {
     setState(() => _guardando = true);
 
     try {
-      await PacienteService().createPaciente(
+      await PacienteService().updatePaciente(
+        pacienteId: widget.paciente.id,
         nombre: _cNombre.text.trim(),
         sexo: _sexo,
         fechaNacimiento: fechaNacimiento,
@@ -51,6 +66,23 @@ class _PacienteCreateViewState extends State<PacienteCreateView> {
       if (!mounted) return;
       setState(() => _guardando = false);
       _mostrarMensaje('Error: $error');
+    }
+  }
+
+  Future<void> _confirmarEliminacion() async {
+    final confirmar = await DialogoConfirmacion.mostrar(
+      context,
+      titulo: 'Eliminar paciente',
+      mensaje: '¿Deseas eliminar este paciente?',
+    );
+
+    if (!confirmar || !mounted) return;
+
+    try {
+      await PacienteService().deletePaciente(widget.paciente.id);
+      if (mounted) Navigator.pop(context, true);
+    } catch (error) {
+      if (mounted) _mostrarMensaje('Error: $error');
     }
   }
 
@@ -83,7 +115,7 @@ class _PacienteCreateViewState extends State<PacienteCreateView> {
           child: Column(
             children: [
               TopAppBar(
-                titulo: 'Nuevo paciente',
+                titulo: 'Editar paciente',
                 alVolver: () => Navigator.pop(context),
               ),
               Expanded(child: _formulario()),
@@ -101,7 +133,7 @@ class _PacienteCreateViewState extends State<PacienteCreateView> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           const SizedBox(height: 8),
-          Input(etiqueta: 'Nombre', controlador: _cNombre, placeholder: 'Text'),
+          Input(etiqueta: 'Nombre', controlador: _cNombre),
           const SizedBox(height: 32),
           const Text(
             'Sexo',
@@ -120,7 +152,6 @@ class _PacienteCreateViewState extends State<PacienteCreateView> {
           Input(
             etiqueta: 'Teléfono',
             controlador: _cTelefono,
-            placeholder: 'Telefono',
             tipoTeclado: TextInputType.phone,
           ),
           const SizedBox(height: 32),
@@ -129,16 +160,16 @@ class _PacienteCreateViewState extends State<PacienteCreateView> {
               width: 138,
               height: 46,
               child: ElevatedButton(
-                onPressed: _guardando ? null : _guardarPaciente,
+                onPressed: _guardando ? null : _guardarCambios,
                 style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFFDDFFDF),
+                  backgroundColor: const Color(0xFFD1FFD2),
                   foregroundColor: const Color(0xFF616161),
-                  disabledBackgroundColor: const Color(0xFFDDFFDF),
+                  disabledBackgroundColor: const Color(0xFFD1FFD2),
                   elevation: 0,
                   padding: EdgeInsets.zero,
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(10),
-                    side: const BorderSide(color: Color(0xFFDDFFDF)),
+                    side: const BorderSide(color: Color(0xFFD1FFD2)),
                   ),
                 ),
                 child: _guardando
@@ -148,9 +179,24 @@ class _PacienteCreateViewState extends State<PacienteCreateView> {
                         child: CircularProgressIndicator(strokeWidth: 2),
                       )
                     : const Text(
-                        'Guardar',
+                        'Guardar cambios',
                         style: TextStyle(fontFamily: semibold, fontSize: 15),
                       ),
+              ),
+            ),
+          ),
+          const SizedBox(height: 24),
+          SizedBox(
+            height: 46,
+            child: TextButton(
+              onPressed: _confirmarEliminacion,
+              style: TextButton.styleFrom(
+                alignment: Alignment.center,
+                foregroundColor: const Color(0xFFDC1A1D),
+              ),
+              child: const Text(
+                'Eliminar paciente',
+                style: TextStyle(fontFamily: regular, fontSize: 16),
               ),
             ),
           ),
@@ -162,8 +208,8 @@ class _PacienteCreateViewState extends State<PacienteCreateView> {
   Widget _campoSexo() {
     return RadioGroup<String>(
       groupValue: _sexo,
-      onChanged: (nuevoValor) {
-        if (nuevoValor != null) setState(() => _sexo = nuevoValor);
+      onChanged: (valor) {
+        if (valor != null) setState(() => _sexo = valor);
       },
       child: SizedBox(
         height: 22,
