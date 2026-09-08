@@ -25,6 +25,24 @@ class _PacienteEditViewState extends State<PacienteEditView> {
   late String _sexo;
   bool _guardando = false;
 
+  Future<void> _seleccionarFecha() async {
+    final hoy = DateTime.now();
+    final fechaActual = DateTime.tryParse(_cFecha.text) ?? hoy;
+    final fechaInicial = fechaActual.isAfter(hoy) ? hoy : fechaActual;
+    final fecha = await showDatePicker(
+      context: context,
+      initialDate: fechaInicial,
+      firstDate: DateTime(1900),
+      lastDate: hoy,
+    );
+
+    if (fecha != null) {
+      setState(() {
+        _cFecha.text = fecha.toIso8601String().split('T').first;
+      });
+    }
+  }
+
   @override
   void initState() {
     super.initState();
@@ -147,7 +165,14 @@ class _PacienteEditViewState extends State<PacienteEditView> {
           const SizedBox(height: 8),
           _campoSexo(),
           const SizedBox(height: 31),
-          Input(etiqueta: 'Fecha (yyyy-MM-dd)', controlador: _cFecha),
+          Input(
+            etiqueta: 'Fecha de nacimiento',
+            controlador: _cFecha,
+            placeholder: 'Selecciona una fecha',
+            soloLectura: true,
+            alTocar: _seleccionarFecha,
+            iconoFinal: Icons.calendar_today_outlined,
+          ),
           const SizedBox(height: 8),
           Input(
             etiqueta: 'Teléfono',

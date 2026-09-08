@@ -13,6 +13,8 @@ class Input extends StatelessWidget {
     this.unidad,
     this.mensajeError,
     this.nodoFoco,
+    this.alTocar,
+    this.iconoFinal,
   });
 
   final String etiqueta;
@@ -23,6 +25,8 @@ class Input extends StatelessWidget {
   final String? unidad;
   final String? mensajeError;
   final FocusNode? nodoFoco;
+  final VoidCallback? alTocar;
+  final IconData? iconoFinal;
 
   @override
   Widget build(BuildContext context) {
@@ -43,6 +47,7 @@ class Input extends StatelessWidget {
             focusNode: nodoFoco,
             keyboardType: tipoTeclado,
             readOnly: soloLectura,
+            onTap: alTocar,
             style: const TextStyle(
               color: Color(0xFF616161),
               fontFamily: regular,
@@ -52,6 +57,9 @@ class Input extends StatelessWidget {
             decoration: InputDecoration(
               hintText: placeholder,
               suffixText: unidad,
+              suffixIcon: iconoFinal == null
+                  ? null
+                  : Icon(iconoFinal, color: const Color(0xFF616161), size: 20),
               hintStyle: const TextStyle(
                 color: Color(0xFF616161),
                 fontFamily: regular,
