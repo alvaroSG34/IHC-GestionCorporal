@@ -3,6 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from database import Base, engine
 from app.pacientes.router import paciente
 from app.evaluaciones.router import evaluacion
+from app.evolucion.router import evolucion
 from app.usuarios.router import usuario
 from app.pacientes.model.paciente import Paciente
 from app.evaluaciones.model.evaluacion import Evaluacion
@@ -22,4 +23,5 @@ app.add_middleware(
 
 app.include_router(paciente.router)
 app.include_router(evaluacion.router)
+app.include_router(evolucion.router)
 app.include_router(usuario.router)
