@@ -14,4 +14,5 @@ class Paciente(Base):
 
     # relacion con evaluacion y usuario
     evaluaciones = relationship("Evaluacion", back_populates="paciente")
+    citas = relationship("Cita", back_populates="paciente")
     usuario = relationship("Usuario",back_populates="pacientes")
