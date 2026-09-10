@@ -4,6 +4,7 @@ import '../../consts/colors.dart';
 import '../../consts/styles.dart';
 import '../../models/paciente.dart';
 import '../../services/evaluacion_service.dart';
+import '../../widgets/boton_guardar.dart';
 import '../../widgets/input.dart';
 import '../../widgets/top_app_bar.dart';
 
@@ -24,6 +25,31 @@ class _EvaluacionCreateViewState extends State<EvaluacionCreateView> {
   final _controladorObservacion = TextEditingController();
 
   bool _guardando = false;
+
+  @override
+  void initState() {
+    super.initState();
+    _controladorPeso.addListener(_calcularImc);
+    _controladorAltura.addListener(_calcularImc);
+  }
+
+  void _calcularImc() {
+    final peso = double.tryParse(
+      _controladorPeso.text.trim().replaceAll(',', '.'),
+    );
+    final alturaCm = double.tryParse(
+      _controladorAltura.text.trim().replaceAll(',', '.'),
+    );
+
+    if (peso == null || peso <= 0 || alturaCm == null || alturaCm <= 0) {
+      _controladorImc.clear();
+      return;
+    }
+
+    final alturaMetros = alturaCm / 100;
+    final imc = peso / (alturaMetros * alturaMetros);
+    _controladorImc.text = imc.toStringAsFixed(1);
+  }
 
   Future<void> _guardarEvaluacion() async {
     final peso = double.tryParse(
@@ -77,6 +103,8 @@ class _EvaluacionCreateViewState extends State<EvaluacionCreateView> {
 
   @override
   void dispose() {
+    _controladorPeso.removeListener(_calcularImc);
+    _controladorAltura.removeListener(_calcularImc);
     _controladorPeso.dispose();
     _controladorAltura.dispose();
     _controladorMasa.dispose();
@@ -88,11 +116,10 @@ class _EvaluacionCreateViewState extends State<EvaluacionCreateView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: blancoplomizo,
       body: SafeArea(
         child: Container(
           decoration: BoxDecoration(
-            color: const Color(0xFFFBFBFB),
+            color: background,
             border: Border.all(color: const Color(0xFFB8B8B8)),
             borderRadius: BorderRadius.circular(18),
           ),
@@ -197,33 +224,10 @@ class _EvaluacionCreateViewState extends State<EvaluacionCreateView> {
           ),
           const SizedBox(height: 32),
           Center(
-            child: SizedBox(
-              width: 138,
-              height: 46,
-              child: ElevatedButton(
-                onPressed: _guardando ? null : _guardarEvaluacion,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFFDDFFDF),
-                  foregroundColor: const Color(0xFF616161),
-                  disabledBackgroundColor: const Color(0xFFDDFFDF),
-                  elevation: 0,
-                  padding: EdgeInsets.zero,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                    side: const BorderSide(color: Color(0xFFDDFFDF)),
-                  ),
-                ),
-                child: _guardando
-                    ? const SizedBox(
-                        width: 18,
-                        height: 18,
-                        child: CircularProgressIndicator(strokeWidth: 2),
-                      )
-                    : const Text(
-                        'Guardar',
-                        style: TextStyle(fontFamily: semibold, fontSize: 15),
-                      ),
-              ),
+            child: BotonGuardar(
+              texto: 'Guardar',
+              alPresionar: _guardando ? null : _guardarEvaluacion,
+              estaCargando: _guardando,
             ),
           ),
         ],

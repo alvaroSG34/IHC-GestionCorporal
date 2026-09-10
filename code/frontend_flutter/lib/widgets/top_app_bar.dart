@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../consts/colors.dart';
 import '../consts/styles.dart';
 
 class TopAppBar extends StatelessWidget {
@@ -41,10 +42,8 @@ class TopAppBar extends StatelessWidget {
               Expanded(
                 child: Text(
                   titulo!,
-                  style: const TextStyle(
-                    color: Color(0xFF2E2E2E),
-                    fontFamily: semibold,
-                    fontSize: 24,
+                  style: figmaHeading.copyWith(
+                    color: secundario,
                     height: 32 / 24,
                   ),
                 ),

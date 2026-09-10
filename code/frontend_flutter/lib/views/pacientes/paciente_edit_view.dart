@@ -4,6 +4,7 @@ import '../../consts/colors.dart';
 import '../../consts/styles.dart';
 import '../../models/paciente.dart';
 import '../../services/paciente_service.dart';
+import '../../widgets/boton_guardar.dart';
 import '../../widgets/dialogo_confirmacion.dart';
 import '../../widgets/input.dart';
 import '../../widgets/top_app_bar.dart';
@@ -23,6 +24,24 @@ class _PacienteEditViewState extends State<PacienteEditView> {
   late final TextEditingController _cFecha;
   late String _sexo;
   bool _guardando = false;
+
+  Future<void> _seleccionarFecha() async {
+    final hoy = DateTime.now();
+    final fechaActual = DateTime.tryParse(_cFecha.text) ?? hoy;
+    final fechaInicial = fechaActual.isAfter(hoy) ? hoy : fechaActual;
+    final fecha = await showDatePicker(
+      context: context,
+      initialDate: fechaInicial,
+      firstDate: DateTime(1900),
+      lastDate: hoy,
+    );
+
+    if (fecha != null) {
+      setState(() {
+        _cFecha.text = fecha.toIso8601String().split('T').first;
+      });
+    }
+  }
 
   @override
   void initState() {
@@ -103,11 +122,10 @@ class _PacienteEditViewState extends State<PacienteEditView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: blancoplomizo,
       body: SafeArea(
         child: Container(
           decoration: BoxDecoration(
-            color: const Color(0xFFFBFBFB),
+            color: background,
             border: Border.all(color: const Color(0xFFB8B8B8)),
             borderRadius: BorderRadius.circular(18),
           ),
@@ -147,7 +165,14 @@ class _PacienteEditViewState extends State<PacienteEditView> {
           const SizedBox(height: 8),
           _campoSexo(),
           const SizedBox(height: 31),
-          Input(etiqueta: 'Fecha (yyyy-MM-dd)', controlador: _cFecha),
+          Input(
+            etiqueta: 'Fecha de nacimiento',
+            controlador: _cFecha,
+            placeholder: 'Selecciona una fecha',
+            soloLectura: true,
+            alTocar: _seleccionarFecha,
+            iconoFinal: Icons.calendar_today_outlined,
+          ),
           const SizedBox(height: 8),
           Input(
             etiqueta: 'Teléfono',
@@ -156,33 +181,10 @@ class _PacienteEditViewState extends State<PacienteEditView> {
           ),
           const SizedBox(height: 32),
           Center(
-            child: SizedBox(
-              width: 138,
-              height: 46,
-              child: ElevatedButton(
-                onPressed: _guardando ? null : _guardarCambios,
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFFD1FFD2),
-                  foregroundColor: const Color(0xFF616161),
-                  disabledBackgroundColor: const Color(0xFFD1FFD2),
-                  elevation: 0,
-                  padding: EdgeInsets.zero,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(10),
-                    side: const BorderSide(color: Color(0xFFD1FFD2)),
-                  ),
-                ),
-                child: _guardando
-                    ? const SizedBox(
-                        width: 18,
-                        height: 18,
-                        child: CircularProgressIndicator(strokeWidth: 2),
-                      )
-                    : const Text(
-                        'Guardar cambios',
-                        style: TextStyle(fontFamily: semibold, fontSize: 15),
-                      ),
-              ),
+            child: BotonGuardar(
+              texto: 'Guardar cambios',
+              alPresionar: _guardando ? null : _guardarCambios,
+              estaCargando: _guardando,
             ),
           ),
           const SizedBox(height: 24),

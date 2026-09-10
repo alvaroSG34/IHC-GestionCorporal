@@ -2,12 +2,17 @@ import 'dart:convert';
 import 'package:http/http.dart' as http;
 import '../consts/api_constants.dart';
 import '../models/evaluacion.dart';
+import 'session_service.dart';
 
 class EvaluacionService {
+  Future<Map<String, String>> _encabezados() {
+    return SessionService().encabezadosAutenticados();
+  }
+
   Future<Evaluacion> getEvaluacion(int evaluacionId) async {
     final response = await http.get(
       Uri.parse('$baseUrl/evaluaciones/$evaluacionId'),
-      headers: {'Content-Type': 'application/json'},
+      headers: await _encabezados(),
     );
 
     if (response.statusCode == 200) {
@@ -22,7 +27,7 @@ class EvaluacionService {
   Future<List<Evaluacion>> getEvaluaciones(int pacienteId) async {
     final response = await http.get(
       Uri.parse('$baseUrl/evaluaciones/paciente/$pacienteId'),
-      headers: {'Content-Type': 'application/json'},
+      headers: await _encabezados(),
     );
 
     if (response.statusCode == 200) {
@@ -45,7 +50,7 @@ class EvaluacionService {
   }) async {
     final response = await http.post(
       Uri.parse('$baseUrl/evaluaciones/'),
-      headers: {'Content-Type': 'application/json'},
+      headers: await _encabezados(),
       body: jsonEncode({
         'altura': altura,
         'peso': peso,
@@ -72,7 +77,7 @@ class EvaluacionService {
   }) async {
     final response = await http.put(
       Uri.parse('$baseUrl/evaluaciones/$evaluacionId'),
-      headers: {'Content-Type': 'application/json'},
+      headers: await _encabezados(),
       body: jsonEncode({
         'altura': altura,
         'peso': peso,
@@ -92,7 +97,7 @@ class EvaluacionService {
   Future<void> deleteEvaluacion(int evaluacionId) async {
     final response = await http.delete(
       Uri.parse('$baseUrl/evaluaciones/$evaluacionId'),
-      headers: {'Content-Type': 'application/json'},
+      headers: await _encabezados(),
     );
 
     if (response.statusCode != 200) {

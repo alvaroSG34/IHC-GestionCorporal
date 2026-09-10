@@ -6,6 +6,7 @@ import '../../models/evaluacion.dart';
 import '../../models/paciente.dart';
 import '../../widgets/barra_inferior.dart';
 import '../../widgets/top_app_bar.dart';
+import '../home_view/home_view.dart';
 import 'evaluacion_edit_view.dart';
 
 class EvaluacionDetalleView extends StatelessWidget {
@@ -21,11 +22,10 @@ class EvaluacionDetalleView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: blancoplomizo,
       body: SafeArea(
         child: Container(
           decoration: BoxDecoration(
-            color: const Color(0xFFFBFBFB),
+            color: background,
             border: Border.all(color: const Color(0xFFC7C7C7)),
             borderRadius: BorderRadius.circular(18),
           ),
@@ -53,9 +53,18 @@ class EvaluacionDetalleView extends StatelessWidget {
               ),
               Expanded(child: _contenido()),
               BarraInferior(
-                indiceSeleccionado: 2,
+                indiceSeleccionado: 1,
                 alCambiar: (indice) {
-                  if (indice == 2) Navigator.pop(context);
+                  if (indice == 1) {
+                    Navigator.pop(context);
+                    return;
+                  }
+                  Navigator.of(context).pushAndRemoveUntil(
+                    MaterialPageRoute(
+                      builder: (_) => HomeView(indiceInicial: indice),
+                    ),
+                    (route) => false,
+                  );
                 },
               ),
             ],

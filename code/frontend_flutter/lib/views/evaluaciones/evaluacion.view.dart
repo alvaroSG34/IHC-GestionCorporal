@@ -6,7 +6,9 @@ import '../../models/evaluacion.dart';
 import '../../models/paciente.dart';
 import '../../services/evaluacion_service.dart';
 import '../../widgets/barra_inferior.dart';
+import '../../widgets/tarjeta_evaluacion.dart';
 import '../../widgets/top_app_bar.dart';
+import '../home_view/home_view.dart';
 import 'evaluacion_create_view.dart';
 import 'evaluacion_detalle_view.dart';
 
@@ -62,11 +64,11 @@ class _EvaluacionViewState extends State<EvaluacionView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: blancoplomizo,
+      backgroundColor: background,
       body: SafeArea(
         child: Container(
           decoration: BoxDecoration(
-            color: const Color(0xFFFBFBFB),
+            color: background,
             border: Border.all(color: const Color(0xFFC7C7C7)),
             borderRadius: BorderRadius.circular(18),
           ),
@@ -80,9 +82,18 @@ class _EvaluacionViewState extends State<EvaluacionView> {
               ),
               Expanded(child: _contenido()),
               BarraInferior(
-                indiceSeleccionado: 2,
+                indiceSeleccionado: 1,
                 alCambiar: (indice) {
-                  if (indice == 2) Navigator.pop(context);
+                  if (indice == 1) {
+                    Navigator.pop(context);
+                    return;
+                  }
+                  Navigator.of(context).pushAndRemoveUntil(
+                    MaterialPageRoute(
+                      builder: (_) => HomeView(indiceInicial: indice),
+                    ),
+                    (route) => false,
+                  );
                 },
               ),
             ],
@@ -141,8 +152,11 @@ class _EvaluacionViewState extends State<EvaluacionView> {
                   padding: EdgeInsets.zero,
                   itemCount: evaluaciones.length,
                   separatorBuilder: (_, _) => const SizedBox(height: 16),
-                  itemBuilder: (contexto, indice) => _TarjetaEvaluacion(
-                    evaluacion: evaluaciones[indice],
+                  itemBuilder: (contexto, indice) => TarjetaEvaluacion(
+                    numero: '${evaluaciones[indice].nro_evaluacion}',
+                    texto: _formatearFechaHora(
+                      evaluaciones[indice].fechaRegistro,
+                    ),
                     alTocar: () => _abrirDetalle(evaluaciones[indice]),
                   ),
                 );
@@ -150,68 +164,6 @@ class _EvaluacionViewState extends State<EvaluacionView> {
             ),
           ),
         ],
-      ),
-    );
-  }
-}
-
-class _TarjetaEvaluacion extends StatelessWidget {
-  const _TarjetaEvaluacion({required this.evaluacion, required this.alTocar});
-
-  final Evaluacion evaluacion;
-  final VoidCallback alTocar;
-
-  @override
-  Widget build(BuildContext context) {
-    return Material(
-      color: Colors.white,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
-        side: const BorderSide(color: Color(0xFFE0E0E0)),
-      ),
-      child: InkWell(
-        borderRadius: BorderRadius.circular(12),
-        onTap: alTocar,
-        child: SizedBox(
-          height: 72,
-          child: Padding(
-            padding: const EdgeInsets.all(16),
-            child: Row(
-              children: [
-                Container(
-                  width: 40,
-                  height: 40,
-                  alignment: Alignment.center,
-                  decoration: const BoxDecoration(
-                    color: Color(0xFFDBDBDB),
-                    shape: BoxShape.circle,
-                  ),
-                  child: Text(
-                    '${evaluacion.nro_evaluacion}',
-                    style: const TextStyle(
-                      color: Color(0xFF616161),
-                      fontFamily: regular,
-                      fontSize: 16,
-                      height: 24 / 16,
-                    ),
-                  ),
-                ),
-                const SizedBox(width: 24),
-                Expanded(
-                  child: Text(
-                    _formatearFechaHora(evaluacion.fechaRegistro),
-                    style: const TextStyle(
-                      color: Color(0xFF616161),
-                      fontFamily: regular,
-                      fontSize: 16,
-                      height: 24 / 16,
-                    ),
-                  ),
-                ),
-              ],
-            ),
-          ),
-        ),
       ),
     );
   }
@@ -233,6 +185,6 @@ class _TarjetaEvaluacion extends StatelessWidget {
     ];
     final hora = fecha.hour.toString().padLeft(2, '0');
     final minuto = fecha.minute.toString().padLeft(2, '0');
-    return '${fecha.day} ${meses[fecha.month - 1]} ${fecha.year} · $hora:$minuto';
+    return '${fecha.day} ${meses[fecha.month - 1]} ${fecha.year} $hora:$minuto';
   }
 }

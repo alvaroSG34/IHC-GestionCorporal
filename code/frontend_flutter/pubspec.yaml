@@ -39,6 +39,8 @@ dependencies:
   velocity_x: ^4.3.1
   get: ^4.7.3
   http: ^1.6.0
+  flutter_secure_storage: ^11.0.0
+  fl_chart: ^0.69.0
 
 dev_dependencies:
   flutter_test:
@@ -65,6 +67,7 @@ flutter:
   # To add assets to your application, add an assets section, like this:
   assets:
     - assets/
+    - assets/icons/icono_usuario_login.png
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images
@@ -78,17 +81,25 @@ flutter:
   # list giving the asset and other descriptors for the font. For
   # example:
   fonts:
-    - family: sans_regular
+    - family: kreon_regular
       fonts:
-        - asset: assets/fonts/sans_regular.ttf
-    
-    - family: sans_semibold
-      fonts:
-        - asset: assets/fonts/sans_semibold.ttf
+        - asset: assets/fonts/Kreon-Regular.ttf
 
-    - family: sans_bold
+    - family: kreon_light
       fonts:
-        - asset: assets/fonts/sans_bold.ttf
+        - asset: assets/fonts/Kreon-Light.ttf
+
+    - family: kreon_medium
+      fonts:
+        - asset: assets/fonts/Kreon-Medium.ttf
+
+    - family: kreon_semibold
+      fonts:
+        - asset: assets/fonts/Kreon-SemiBold.ttf
+
+    - family: kreon_bold
+      fonts:
+        - asset: assets/fonts/Kreon-Bold.ttf
   #
   # For details regarding fonts from package dependencies,
   # see https://flutter.dev/to/font-from-package

@@ -8,4 +8,5 @@ Este README explica cómo levantar el backend desde cero en un entorno nuevo, pa
 - .\.venv\Scripts\Activate.ps1
 - pip install -r requirements.txt
 - crear .env con DATABASE_URL = .....
+- Ejecutar: python -c "import secrets; print(secrets.token_hex(32))"
 - uvicorn main:app --reload --host localhost --port 8000

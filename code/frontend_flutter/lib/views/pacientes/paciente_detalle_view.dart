@@ -7,6 +7,8 @@ import '../../services/paciente_service.dart';
 import '../../widgets/barra_inferior.dart';
 import '../../widgets/top_app_bar.dart';
 import '../evaluaciones/evaluacion.view.dart';
+import '../evolucion/evolucion_view.dart';
+import '../home_view/home_view.dart';
 import 'paciente_edit_view.dart';
 
 class PacienteDetalleView extends StatelessWidget {
@@ -35,11 +37,10 @@ class PacienteDetalleView extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: blancoplomizo,
       body: SafeArea(
         child: Container(
           decoration: BoxDecoration(
-            color: const Color(0xFFFBFBFB),
+            color: background,
             border: Border.all(color: const Color(0xFFC7C7C7)),
             borderRadius: BorderRadius.circular(18),
           ),
@@ -65,7 +66,16 @@ class PacienteDetalleView extends StatelessWidget {
               BarraInferior(
                 indiceSeleccionado: 1,
                 alCambiar: (indice) {
-                  if (indice == 1) Navigator.pop(context);
+                  if (indice == 1) {
+                    Navigator.pop(context);
+                    return;
+                  }
+                  Navigator.of(context).pushAndRemoveUntil(
+                    MaterialPageRoute(
+                      builder: (_) => HomeView(indiceInicial: indice),
+                    ),
+                    (route) => false,
+                  );
                 },
               ),
             ],
@@ -141,6 +151,9 @@ class PacienteDetalleView extends StatelessWidget {
           _resumenMedidas(),
           const SizedBox(height: 24),
           _accesoEvaluaciones(context),
+          const SizedBox(height: 16),
+          _accesoEvolucion(context),
+          const SizedBox(height: 24),
         ],
       ),
     );
@@ -196,6 +209,71 @@ class PacienteDetalleView extends StatelessWidget {
                 ),
                 Text(
                   '›',
+                  style: TextStyle(
+                    color: Color(0xFF616161),
+                    fontFamily: regular,
+                    fontSize: 24,
+                    height: 1,
+                  ),
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _accesoEvolucion(BuildContext context) {
+    return Material(
+      color: Colors.white,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+        side: const BorderSide(color: Color(0xFFE0E0E0)),
+      ),
+      child: InkWell(
+        borderRadius: BorderRadius.circular(12),
+        onTap: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(
+              builder: (_) => EvolucionView(paciente: paciente),
+            ),
+          );
+        },
+        child: const SizedBox(
+          height: 80,
+          child: Padding(
+            padding: EdgeInsets.all(16),
+            child: Row(
+              children: [
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        'Ver evoluci\u00f3n',
+                        style: TextStyle(
+                          color: Color(0xFF2E2E2E),
+                          fontFamily: semibold,
+                          fontSize: 16,
+                          height: 24 / 16,
+                        ),
+                      ),
+                      Text(
+                        'Gr\u00e1ficos y progreso corporal',
+                        style: TextStyle(
+                          color: Color(0xFF616161),
+                          fontFamily: regular,
+                          fontSize: 14,
+                          height: 16 / 14,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Text(
+                  '\u203a',
                   style: TextStyle(
                     color: Color(0xFF616161),
                     fontFamily: regular,
