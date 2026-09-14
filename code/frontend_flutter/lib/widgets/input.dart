@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../consts/colors.dart';
 import '../consts/styles.dart';
 
 class Input extends StatelessWidget {
@@ -14,6 +15,7 @@ class Input extends StatelessWidget {
     this.mensajeError,
     this.nodoFoco,
     this.alTocar,
+    this.alCambiar,
     this.iconoFinal,
     this.ocultarTexto = false,
   });
@@ -27,6 +29,7 @@ class Input extends StatelessWidget {
   final String? mensajeError;
   final FocusNode? nodoFoco;
   final VoidCallback? alTocar;
+  final ValueChanged<String>? alCambiar;
   final IconData? iconoFinal;
   final bool ocultarTexto;
 
@@ -53,9 +56,9 @@ class Input extends StatelessWidget {
             enableSuggestions: !ocultarTexto,
             autocorrect: !ocultarTexto,
             onTap: alTocar,
-            style: const TextStyle(
-              color: Color(0xFF616161),
-              fontFamily: regular,
+            onChanged: alCambiar,
+            style: figmaCaption.copyWith(
+              color: textoSecundario,
               fontSize: 16,
               height: 24 / 16,
             ),
@@ -64,16 +67,13 @@ class Input extends StatelessWidget {
               suffixText: unidad,
               suffixIcon: iconoFinal == null
                   ? null
-                  : Icon(iconoFinal, color: const Color(0xFF616161), size: 20),
-              hintStyle: const TextStyle(
-                color: Color(0xFF616161),
-                fontFamily: regular,
+                  : Icon(iconoFinal, color: textoSecundario, size: 20),
+              hintStyle: figmaCaption.copyWith(
+                color: textoSecundario,
                 fontSize: 16,
               ),
-              suffixStyle: const TextStyle(
-                color: Color(0xFF616161),
-                fontFamily: regular,
-                fontSize: 14,
+              suffixStyle: figmaCaption.copyWith(
+                color: textoSecundario,
                 height: 24 / 14,
               ),
               isDense: true,
@@ -81,9 +81,7 @@ class Input extends StatelessWidget {
               enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.zero,
                 borderSide: BorderSide(
-                  color: tieneError
-                      ? const Color(0xFFDC1A1D)
-                      : const Color(0xFF616161),
+                  color: tieneError ? const Color(0xFFDC1A1D) : textoSecundario,
                 ),
               ),
               focusedBorder: OutlineInputBorder(
@@ -101,9 +99,8 @@ class Input extends StatelessWidget {
           const SizedBox(height: 8),
           Text(
             mensajeError!,
-            style: const TextStyle(
-              color: Color(0xFFDC1A1D),
-              fontFamily: regular,
+            style: figmaCaption.copyWith(
+              color: const Color(0xFFDC1A1D),
               fontSize: 16,
               height: 24 / 16,
             ),

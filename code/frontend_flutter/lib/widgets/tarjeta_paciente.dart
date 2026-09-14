@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../consts/colors.dart';
 import '../consts/styles.dart';
 
 class TarjetaPaciente extends StatelessWidget {
@@ -40,7 +41,7 @@ class TarjetaPaciente extends StatelessWidget {
                 ),
                 const Icon(
                   Icons.chevron_right,
-                  color: Color(0xFF616161),
+                  color: textoSecundario,
                   size: 24,
                 ),
               ],

@@ -92,9 +92,7 @@ class _ElementoNavegacion extends StatelessWidget {
               overflow: TextOverflow.clip,
               textAlign: TextAlign.center,
               style: figmaCaption.copyWith(
-                color: seleccionado
-                    ? const Color(0xFF2E2E2E)
-                    : const Color(0xFF616161),
+                color: seleccionado ? const Color(0xFF2E2E2E) : textoSecundario,
                 height: 16 / 14,
               ),
             ),

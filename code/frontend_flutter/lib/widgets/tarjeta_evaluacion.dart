@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../consts/colors.dart';
 import '../consts/styles.dart';
 
 class TarjetaEvaluacion extends StatelessWidget {
@@ -37,7 +38,7 @@ class TarjetaEvaluacion extends StatelessWidget {
                   child: Text(
                     numero,
                     style: const TextStyle(
-                      color: Color(0xFF616161),
+                      color: textoSecundario,
                       fontFamily: regular,
                       fontSize: 16,
                       height: 24 / 16,
@@ -50,7 +51,7 @@ class TarjetaEvaluacion extends StatelessWidget {
                     texto,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: figmaBody.copyWith(color: const Color(0xFF616161)),
+                    style: figmaBody.copyWith(color: textoSecundario),
                   ),
                 ),
               ],

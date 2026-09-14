@@ -10,7 +10,7 @@ class BotonGuardar extends StatelessWidget {
     required this.alPresionar,
     this.estaCargando = false,
     this.colorFondo = auxiliar,
-    this.colorTexto = const Color(0xFF616161),
+    this.colorTexto = textoSecundario,
   });
 
   final String texto;

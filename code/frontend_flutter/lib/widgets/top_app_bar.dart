@@ -33,7 +33,7 @@ class TopAppBar extends StatelessWidget {
                 etiquetaSemantica: 'Volver',
                 simbolo: '‹',
                 tamanoFuente: 32,
-                color: const Color(0xFF616161),
+                color: textoSecundario,
                 alTocar: alVolver!,
               ),
               const SizedBox(width: 16),
@@ -99,9 +99,8 @@ class _AccionCabecera extends StatelessWidget {
             child: Text(
               simbolo,
               textAlign: TextAlign.center,
-              style: TextStyle(
+              style: figmaCaption.copyWith(
                 color: color,
-                fontFamily: regular,
                 fontSize: tamanoFuente,
                 height: 32 / tamanoFuente,
               ),
