@@ -15,14 +15,14 @@ class PeriodoEvolucionView extends StatefulWidget {
     super.key,
     required this.paciente,
     required this.metrica,
-    this.periodoInicial = PeriodoEvolucion.ultimas3,
+    this.periodoInicial,
     this.desdeInicial,
     this.hastaInicial,
   });
 
   final Paciente paciente;
   final MetricaEvolucion metrica;
-  final PeriodoEvolucion periodoInicial;
+  final PeriodoEvolucion? periodoInicial;
   final DateTime? desdeInicial;
   final DateTime? hastaInicial;
 
@@ -31,9 +31,11 @@ class PeriodoEvolucionView extends StatefulWidget {
 }
 
 class _PeriodoEvolucionViewState extends State<PeriodoEvolucionView> {
-  late PeriodoEvolucion _periodo;
+  late PeriodoEvolucion? _periodo;
   DateTime? _desde;
   DateTime? _hasta;
+  String? _errorPeriodo;
+  String? _errorRango;
 
   @override
   void initState() {
@@ -60,23 +62,29 @@ class _PeriodoEvolucionViewState extends State<PeriodoEvolucionView> {
       } else {
         _hasta = fecha;
       }
+      _errorPeriodo = null;
+      _errorRango = null;
     });
   }
 
   void _verGrafico() {
-    if (_periodo == PeriodoEvolucion.personalizado &&
-        (_desde == null || _hasta == null)) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Selecciona las dos fechas del rango.')),
+    if (_periodo == null) {
+      setState(
+        () => _errorPeriodo = 'Seleccione al menos un periodo establecido',
       );
       return;
     }
-    if (_desde != null && _hasta != null && _desde!.isAfter(_hasta!)) {
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('La fecha desde debe ser anterior a hasta.'),
-        ),
+    if (_periodo == PeriodoEvolucion.personalizado &&
+        _desde != null &&
+        _hasta != null &&
+        _desde!.isAfter(_hasta!)) {
+      setState(
+        () => _errorRango = 'La fecha Desde debe ser inferior a la de Hasta',
       );
+      return;
+    }
+    if (_periodo == PeriodoEvolucion.personalizado &&
+        (_desde == null || _hasta == null)) {
       return;
     }
 
@@ -86,7 +94,7 @@ class _PeriodoEvolucionViewState extends State<PeriodoEvolucionView> {
         builder: (_) => GraficoEvolucionView(
           paciente: widget.paciente,
           metrica: widget.metrica,
-          periodo: _periodo,
+          periodo: _periodo!,
           desde: _periodo == PeriodoEvolucion.personalizado ? _desde : null,
           hasta: _periodo == PeriodoEvolucion.personalizado ? _hasta : null,
         ),
@@ -133,7 +141,11 @@ class _PeriodoEvolucionViewState extends State<PeriodoEvolucionView> {
                         child: _OpcionPeriodo(
                           periodo: periodo,
                           seleccionada: _periodo == periodo,
-                          alTocar: () => setState(() => _periodo = periodo),
+                          alTocar: () => setState(() {
+                            _periodo = periodo;
+                            _errorPeriodo = null;
+                            _errorRango = null;
+                          }),
                         ),
                       ),
                     ),
@@ -146,6 +158,7 @@ class _PeriodoEvolucionViewState extends State<PeriodoEvolucionView> {
                           child: _SelectorFecha(
                             etiqueta: 'Desde',
                             fecha: _desde,
+                            tieneError: _errorRango != null,
                             alTocar: () => _seleccionarFecha(esDesde: true),
                           ),
                         ),
@@ -154,11 +167,22 @@ class _PeriodoEvolucionViewState extends State<PeriodoEvolucionView> {
                           child: _SelectorFecha(
                             etiqueta: 'Hasta',
                             fecha: _hasta,
+                            tieneError: _errorRango != null,
                             alTocar: () => _seleccionarFecha(esDesde: false),
                           ),
                         ),
                       ],
                     ),
+                    if (_errorPeriodo != null || _errorRango != null) ...[
+                      const SizedBox(height: 12),
+                      Text(
+                        _errorPeriodo ?? _errorRango!,
+                        style: figmaCaption.copyWith(
+                          color: error,
+                          fontSize: 12,
+                        ),
+                      ),
+                    ],
                     const SizedBox(height: 24),
                     SizedBox(
                       height: 52,
@@ -260,11 +284,13 @@ class _SelectorFecha extends StatelessWidget {
   const _SelectorFecha({
     required this.etiqueta,
     required this.fecha,
+    required this.tieneError,
     required this.alTocar,
   });
 
   final String etiqueta;
   final DateTime? fecha;
+  final bool tieneError;
   final VoidCallback alTocar;
 
   @override
@@ -279,7 +305,9 @@ class _SelectorFecha extends StatelessWidget {
           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
           decoration: BoxDecoration(
             borderRadius: BorderRadius.circular(12),
-            border: Border.all(color: const Color(0xFFE0E0E0)),
+            border: Border.all(
+              color: tieneError ? error : const Color(0xFFE0E0E0),
+            ),
           ),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,

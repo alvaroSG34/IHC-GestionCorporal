@@ -106,10 +106,11 @@ class PacienteDetalleView extends StatelessWidget {
               ),
               child: Text(
                 _inicialPaciente(),
-                style: const TextStyle(
-                  color: Color(0xFF2E2E2E),
+                style: figmaHeading.copyWith(
+                  color: const Color(0xFF2E2E2E),
                   fontFamily: semibold,
                   fontSize: 32,
+                  fontWeight: FontWeight.w600,
                   height: 40 / 32,
                 ),
               ),
@@ -119,10 +120,11 @@ class PacienteDetalleView extends StatelessWidget {
           Text(
             paciente.nombre,
             textAlign: TextAlign.center,
-            style: const TextStyle(
-              color: Color(0xFF2E2E2E),
+            style: figmaHeading.copyWith(
+              color: const Color(0xFF2E2E2E),
               fontFamily: semibold,
               fontSize: 20,
+              fontWeight: FontWeight.w600,
               height: 28 / 20,
             ),
           ),
@@ -130,19 +132,16 @@ class PacienteDetalleView extends StatelessWidget {
           Text(
             '${_calcularEdad()} años · ${_mostrarSexo()}',
             textAlign: TextAlign.center,
-            style: const TextStyle(
-              color: Color(0xFF616161),
-              fontFamily: regular,
-              fontSize: 14,
+            style: figmaCaption.copyWith(
+              color: textoSecundario,
               height: 20 / 14,
             ),
           ),
           const SizedBox(height: 24),
-          const Text(
+          Text(
             'Resumen corporal',
-            style: TextStyle(
-              color: Color(0xFF2E2E2E),
-              fontFamily: semibold,
+            style: figmaButton.copyWith(
+              color: const Color(0xFF2E2E2E),
               fontSize: 16,
               height: 24 / 16,
             ),
@@ -176,7 +175,7 @@ class PacienteDetalleView extends StatelessWidget {
             ),
           );
         },
-        child: const SizedBox(
+        child: SizedBox(
           height: 80,
           child: Padding(
             padding: EdgeInsets.all(16),
@@ -188,19 +187,16 @@ class PacienteDetalleView extends StatelessWidget {
                     children: [
                       Text(
                         'Ver evaluaciones',
-                        style: TextStyle(
-                          color: Color(0xFF2E2E2E),
-                          fontFamily: semibold,
+                        style: figmaButton.copyWith(
+                          color: const Color(0xFF2E2E2E),
                           fontSize: 16,
                           height: 24 / 16,
                         ),
                       ),
                       Text(
                         'Historial y evolución',
-                        style: TextStyle(
-                          color: Color(0xFF616161),
-                          fontFamily: regular,
-                          fontSize: 14,
+                        style: figmaCaption.copyWith(
+                          color: textoSecundario,
                           height: 16 / 14,
                         ),
                       ),
@@ -209,10 +205,11 @@ class PacienteDetalleView extends StatelessWidget {
                 ),
                 Text(
                   '›',
-                  style: TextStyle(
-                    color: Color(0xFF616161),
+                  style: figmaHeading.copyWith(
+                    color: textoSecundario,
                     fontFamily: regular,
                     fontSize: 24,
+                    fontWeight: FontWeight.w400,
                     height: 1,
                   ),
                 ),
@@ -241,7 +238,7 @@ class PacienteDetalleView extends StatelessWidget {
             ),
           );
         },
-        child: const SizedBox(
+        child: SizedBox(
           height: 80,
           child: Padding(
             padding: EdgeInsets.all(16),
@@ -253,19 +250,16 @@ class PacienteDetalleView extends StatelessWidget {
                     children: [
                       Text(
                         'Ver evoluci\u00f3n',
-                        style: TextStyle(
-                          color: Color(0xFF2E2E2E),
-                          fontFamily: semibold,
+                        style: figmaButton.copyWith(
+                          color: const Color(0xFF2E2E2E),
                           fontSize: 16,
                           height: 24 / 16,
                         ),
                       ),
                       Text(
                         'Gr\u00e1ficos y progreso corporal',
-                        style: TextStyle(
-                          color: Color(0xFF616161),
-                          fontFamily: regular,
-                          fontSize: 14,
+                        style: figmaCaption.copyWith(
+                          color: textoSecundario,
                           height: 16 / 14,
                         ),
                       ),
@@ -274,10 +268,11 @@ class PacienteDetalleView extends StatelessWidget {
                 ),
                 Text(
                   '\u203a',
-                  style: TextStyle(
-                    color: Color(0xFF616161),
+                  style: figmaHeading.copyWith(
+                    color: textoSecundario,
                     fontFamily: regular,
                     fontSize: 24,
+                    fontWeight: FontWeight.w400,
                     height: 1,
                   ),
                 ),
@@ -329,9 +324,8 @@ class PacienteDetalleView extends StatelessWidget {
           children: [
             Text(
               titulo,
-              style: const TextStyle(
-                color: Color(0xFF616161),
-                fontSize: 14,
+              style: figmaCaption.copyWith(
+                color: textoSecundario,
                 height: 16 / 14,
               ),
             ),
@@ -339,10 +333,11 @@ class PacienteDetalleView extends StatelessWidget {
             Center(
               child: Text(
                 valor,
-                style: const TextStyle(
-                  color: Color(0xFF2E2E2E),
+                style: figmaHeading.copyWith(
+                  color: const Color(0xFF2E2E2E),
                   fontFamily: semibold,
                   fontSize: 20,
+                  fontWeight: FontWeight.w600,
                   height: 24 / 20,
                 ),
               ),
@@ -351,8 +346,8 @@ class PacienteDetalleView extends StatelessWidget {
             Center(
               child: Text(
                 unidad,
-                style: const TextStyle(
-                  color: Color(0xFF616161),
+                style: figmaCaption.copyWith(
+                  color: textoSecundario,
                   fontSize: 12,
                   height: 16 / 12,
                 ),

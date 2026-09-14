@@ -5,8 +5,10 @@ import '../../consts/styles.dart';
 import '../../models/paciente.dart';
 import '../../services/evaluacion_service.dart';
 import '../../widgets/boton_guardar.dart';
+import '../../widgets/dialogo_exito.dart';
 import '../../widgets/input.dart';
 import '../../widgets/top_app_bar.dart';
+import 'evaluacion_detalle_view.dart';
 
 class EvaluacionCreateView extends StatefulWidget {
   const EvaluacionCreateView({super.key, required this.paciente});
@@ -25,6 +27,9 @@ class _EvaluacionCreateViewState extends State<EvaluacionCreateView> {
   final _controladorObservacion = TextEditingController();
 
   bool _guardando = false;
+  String? _errorPeso;
+  String? _errorAltura;
+  String? _errorMasa;
 
   @override
   void initState() {
@@ -60,34 +65,54 @@ class _EvaluacionCreateViewState extends State<EvaluacionCreateView> {
       _controladorMasa.text.trim().replaceAll(',', '.'),
     );
 
-    if (peso == null || peso <= 0) {
-      _mostrarMensaje('El peso debe ser mayor que cero');
-      return;
-    }
-    if (altura == null || altura <= 0) {
-      _mostrarMensaje('La altura debe ser mayor que cero');
-      return;
-    }
-    if (masa == null || masa <= 0 || masa > 100) {
-      _mostrarMensaje('La masa muscular debe estar entre 0 y 100');
+    final errorPeso = peso == null || peso <= 0
+        ? 'El valor debe ser numerico.'
+        : null;
+    final errorAltura = altura == null || altura <= 0
+        ? 'Altura debe ser mayor que 0'
+        : null;
+    final errorMasa = masa == null || masa <= 0 || masa > 100
+        ? 'El valor debe estar entre 0 - 100.'
+        : null;
+
+    if (errorPeso != null || errorAltura != null || errorMasa != null) {
+      setState(() {
+        _errorPeso = errorPeso;
+        _errorAltura = errorAltura;
+        _errorMasa = errorMasa;
+      });
       return;
     }
 
     setState(() => _guardando = true);
 
     try {
-      await EvaluacionService().createEvaluacion(
+      final evaluacionCreada = await EvaluacionService().createEvaluacion(
         paciente: widget.paciente.id,
-        altura: altura,
-        peso: peso,
-        masa: masa,
+        altura: altura!,
+        peso: peso!,
+        masa: masa!,
         observacion: _controladorObservacion.text.trim().isEmpty
             ? null
             : _controladorObservacion.text.trim(),
       );
 
       if (!mounted) return;
-      Navigator.pop(context, true);
+      await DialogoExito.mostrar(
+        context,
+        titulo: 'Evaluación creada',
+        mensaje: 'Evaluación creada correctamente.',
+      );
+      if (!mounted) return;
+      Navigator.of(context).pushReplacement<bool, bool>(
+        MaterialPageRoute(
+          builder: (_) => EvaluacionDetalleView(
+            evaluacion: evaluacionCreada,
+            paciente: widget.paciente,
+          ),
+        ),
+        result: true,
+      );
     } catch (error) {
       if (!mounted) return;
       setState(() => _guardando = false);
@@ -160,6 +185,10 @@ class _EvaluacionCreateViewState extends State<EvaluacionCreateView> {
             controlador: _controladorPeso,
             tipoTeclado: const TextInputType.numberWithOptions(decimal: true),
             unidad: 'kg',
+            mensajeError: _errorPeso,
+            alCambiar: (_) {
+              if (_errorPeso != null) setState(() => _errorPeso = null);
+            },
           ),
           const SizedBox(height: 8),
           Input(
@@ -167,6 +196,10 @@ class _EvaluacionCreateViewState extends State<EvaluacionCreateView> {
             controlador: _controladorAltura,
             tipoTeclado: TextInputType.number,
             unidad: 'cm',
+            mensajeError: _errorAltura,
+            alCambiar: (_) {
+              if (_errorAltura != null) setState(() => _errorAltura = null);
+            },
           ),
           const SizedBox(height: 8),
           Input(
@@ -174,6 +207,10 @@ class _EvaluacionCreateViewState extends State<EvaluacionCreateView> {
             controlador: _controladorMasa,
             tipoTeclado: const TextInputType.numberWithOptions(decimal: true),
             unidad: '%',
+            mensajeError: _errorMasa,
+            alCambiar: (_) {
+              if (_errorMasa != null) setState(() => _errorMasa = null);
+            },
           ),
           const SizedBox(height: 8),
           Input(

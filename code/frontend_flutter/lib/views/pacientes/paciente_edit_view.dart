@@ -153,11 +153,10 @@ class _PacienteEditViewState extends State<PacienteEditView> {
           const SizedBox(height: 8),
           Input(etiqueta: 'Nombre', controlador: _cNombre),
           const SizedBox(height: 32),
-          const Text(
+          Text(
             'Sexo',
-            style: TextStyle(
-              color: Color(0xFF2E2E2E),
-              fontFamily: regular,
+            style: figmaCaption.copyWith(
+              color: const Color(0xFF2E2E2E),
               fontSize: 16,
               height: 24 / 16,
             ),
@@ -196,9 +195,13 @@ class _PacienteEditViewState extends State<PacienteEditView> {
                 alignment: Alignment.center,
                 foregroundColor: const Color(0xFFDC1A1D),
               ),
-              child: const Text(
+              child: Text(
                 'Eliminar paciente',
-                style: TextStyle(fontFamily: regular, fontSize: 16),
+                style: figmaButton.copyWith(
+                  color: const Color(0xFFDC1A1D),
+                  fontFamily: regular,
+                  fontWeight: FontWeight.w400,
+                ),
               ),
             ),
           ),
@@ -241,7 +244,7 @@ class _PacienteEditViewState extends State<PacienteEditView> {
         height: 22,
         child: Radio<String>(
           value: valor,
-          activeColor: const Color(0xFF616161),
+          activeColor: textoSecundario,
           materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
           visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
         ),
@@ -254,10 +257,8 @@ class _PacienteEditViewState extends State<PacienteEditView> {
       width: 88,
       child: Text(
         texto,
-        style: const TextStyle(
-          color: Color(0xFF2E2E2E),
-          fontFamily: regular,
-          fontSize: 14,
+        style: figmaCaption.copyWith(
+          color: const Color(0xFF2E2E2E),
           height: 16 / 14,
         ),
       ),

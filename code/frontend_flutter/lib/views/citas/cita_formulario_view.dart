@@ -8,6 +8,7 @@ import '../../services/cita_service.dart';
 import '../../services/paciente_service.dart';
 import '../../widgets/input.dart';
 import '../../widgets/top_app_bar.dart';
+import 'cita_detalle_view.dart';
 import 'cita_formatters.dart';
 
 class CitaFormularioView extends StatefulWidget {
@@ -30,6 +31,10 @@ class _CitaFormularioViewState extends State<CitaFormularioView> {
   DateTime? _fecha;
   TimeOfDay? _hora;
   bool _guardando = false;
+  String? _errorPaciente;
+  String? _errorFecha;
+  String? _errorHora;
+  String? _errorTipo;
 
   bool get _editando => widget.cita != null;
 
@@ -92,6 +97,7 @@ class _CitaFormularioViewState extends State<CitaFormularioView> {
       setState(() {
         _paciente = elegido;
         _cPaciente.text = elegido.nombre;
+        _errorPaciente = null;
       });
     }
   }
@@ -112,6 +118,7 @@ class _CitaFormularioViewState extends State<CitaFormularioView> {
       setState(() {
         _fecha = fecha;
         _cFecha.text = fechaCita(fecha);
+        _errorFecha = null;
       });
     }
   }
@@ -126,28 +133,56 @@ class _CitaFormularioViewState extends State<CitaFormularioView> {
         _hora = hora;
         _cHora.text =
             '${hora.hour.toString().padLeft(2, '0')}:${hora.minute.toString().padLeft(2, '0')}';
+        _errorHora = null;
       });
     }
   }
 
   Future<void> _guardar() async {
     final pacienteId = _paciente?.id ?? widget.cita?.paciente.id;
+    final nombrePaciente = _cPaciente.text.trim();
+    final tipoConsulta = _cTipo.text.trim();
+    final ahora = DateTime.now();
+    final fechaMinima = DateTime(ahora.year, ahora.month, ahora.day);
+    final fechaHora = _fecha != null && _hora != null
+        ? DateTime(
+            _fecha!.year,
+            _fecha!.month,
+            _fecha!.day,
+            _hora!.hour,
+            _hora!.minute,
+          )
+        : null;
+    final soloLetras = RegExp(r'^[A-Za-z]+(?: [A-Za-z]+)*$');
+    final errorPaciente =
+        pacienteId == null ||
+            (nombrePaciente.isNotEmpty && !soloLetras.hasMatch(nombrePaciente))
+        ? 'Solo se permiten caracteres a-z.'
+        : null;
+    final errorFecha = _fecha == null || _fecha!.isBefore(fechaMinima)
+        ? 'Introduzca una fecha posterior'
+        : null;
+    final errorHora = fechaHora == null || !fechaHora.isAfter(ahora)
+        ? 'Hora invalida o reservada'
+        : null;
+    final errorTipo = tipoConsulta.isEmpty || !soloLetras.hasMatch(tipoConsulta)
+        ? 'Solo se permiten caracteres a-z.'
+        : null;
+
     if (pacienteId == null ||
         _fecha == null ||
         _hora == null ||
-        _cTipo.text.trim().isEmpty) {
-      _mensaje('Completa paciente, fecha, hora y tipo de consulta.');
-      return;
-    }
-    final fechaHora = DateTime(
-      _fecha!.year,
-      _fecha!.month,
-      _fecha!.day,
-      _hora!.hour,
-      _hora!.minute,
-    );
-    if (!fechaHora.isAfter(DateTime.now())) {
-      _mensaje('La cita debe programarse para una fecha y hora futura.');
+        tipoConsulta.isEmpty ||
+        errorPaciente != null ||
+        errorFecha != null ||
+        errorHora != null ||
+        errorTipo != null) {
+      setState(() {
+        _errorPaciente = errorPaciente;
+        _errorFecha = errorFecha;
+        _errorHora = errorHora;
+        _errorTipo = errorTipo;
+      });
       return;
     }
     setState(() => _guardando = true);
@@ -156,17 +191,26 @@ class _CitaFormularioViewState extends State<CitaFormularioView> {
         await CitaService().actualizarCita(
           citaId: widget.cita!.id,
           pacienteId: pacienteId,
-          fechaHora: fechaHora,
-          tipoConsulta: _cTipo.text,
+          fechaHora: fechaHora!,
+          tipoConsulta: tipoConsulta,
           observacion: _cObservacion.text,
         );
       } else {
-        await CitaService().crearCita(
+        final citaCreada = await CitaService().crearCita(
           pacienteId: pacienteId,
-          fechaHora: fechaHora,
-          tipoConsulta: _cTipo.text,
+          fechaHora: fechaHora!,
+          tipoConsulta: tipoConsulta,
           observacion: _cObservacion.text,
         );
+        if (mounted) {
+          await Navigator.of(context).pushReplacement<bool, bool>(
+            MaterialPageRoute(
+              builder: (_) => CitaDetalleView(cita: citaCreada),
+            ),
+            result: true,
+          );
+        }
+        return;
       }
       if (mounted) {
         Navigator.pop(context, true);
@@ -174,7 +218,12 @@ class _CitaFormularioViewState extends State<CitaFormularioView> {
     } catch (error) {
       if (mounted) {
         setState(() => _guardando = false);
-        _mensaje(error.toString().replaceFirst('Exception: ', ''));
+        final mensaje = error.toString().replaceFirst('Exception: ', '');
+        if (mensaje.contains('Ya existe una cita programada')) {
+          setState(() => _errorHora = 'Hora invalida o reservada');
+        } else {
+          _mensaje(mensaje);
+        }
       }
     }
   }
@@ -220,6 +269,7 @@ class _CitaFormularioViewState extends State<CitaFormularioView> {
                         placeholder: 'Selecciona un paciente',
                         soloLectura: true,
                         alTocar: _seleccionarPaciente,
+                        mensajeError: _errorPaciente,
                       ),
                       const SizedBox(height: 16),
                       Input(
@@ -229,6 +279,7 @@ class _CitaFormularioViewState extends State<CitaFormularioView> {
                         soloLectura: true,
                         alTocar: _seleccionarFecha,
                         iconoFinal: Icons.calendar_today_outlined,
+                        mensajeError: _errorFecha,
                       ),
                       const SizedBox(height: 16),
                       Input(
@@ -237,12 +288,19 @@ class _CitaFormularioViewState extends State<CitaFormularioView> {
                         placeholder: 'Selecciona una hora',
                         soloLectura: true,
                         alTocar: _seleccionarHora,
+                        mensajeError: _errorHora,
                       ),
                       const SizedBox(height: 16),
                       Input(
                         etiqueta: 'Tipo de consulta',
                         controlador: _cTipo,
                         placeholder: 'Seguimiento',
+                        mensajeError: _errorTipo,
+                        alCambiar: (_) {
+                          if (_errorTipo != null) {
+                            setState(() => _errorTipo = null);
+                          }
+                        },
                       ),
                       const SizedBox(height: 16),
                       Input(

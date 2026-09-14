@@ -69,14 +69,14 @@ class _PacienteViewState extends State<PacienteView> {
                   const SizedBox(height: 24),
                   TextField(
                     controller: _controladorBusqueda,
-                    style: const TextStyle(
+                    style: figmaCaption.copyWith(
                       fontSize: 16,
-                      color: Color(0xFF616161),
+                      color: textoSecundario,
                     ),
                     decoration: InputDecoration(
                       hintText: 'Buscar paciente',
-                      hintStyle: const TextStyle(
-                        color: Color(0xFF616161),
+                      hintStyle: figmaCaption.copyWith(
+                        color: textoSecundario,
                         fontSize: 16,
                       ),
                       filled: true,
@@ -107,10 +107,7 @@ class _PacienteViewState extends State<PacienteView> {
                             child: Text(
                               'Error al cargar pacientes:\n${estado.error}',
                               textAlign: TextAlign.center,
-                              style: TextStyle(
-                                color: plomo,
-                                fontFamily: regular,
-                              ),
+                              style: figmaCaption.copyWith(color: plomo),
                             ),
                           );
                         }
@@ -129,10 +126,7 @@ class _PacienteViewState extends State<PacienteView> {
                               _textoBusqueda.isEmpty
                                   ? '0 Pacientes'
                                   : 'No se encontraron pacientes',
-                              style: TextStyle(
-                                color: plomo,
-                                fontFamily: regular,
-                              ),
+                              style: figmaCaption.copyWith(color: plomo),
                             ),
                           );
                         }

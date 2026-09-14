@@ -4,8 +4,10 @@ import '../../consts/colors.dart';
 import '../../consts/styles.dart';
 import '../../services/paciente_service.dart';
 import '../../widgets/boton_guardar.dart';
+import '../../widgets/dialogo_exito.dart';
 import '../../widgets/input.dart';
 import '../../widgets/top_app_bar.dart';
+import 'paciente_detalle_view.dart';
 
 class PacienteCreateView extends StatefulWidget {
   const PacienteCreateView({super.key});
@@ -21,6 +23,9 @@ class _PacienteCreateViewState extends State<PacienteCreateView> {
 
   String _sexo = 'M';
   bool _guardando = false;
+  String? _errorNombre;
+  String? _errorFecha;
+  String? _errorTelefono;
 
   Future<void> _seleccionarFecha() async {
     final hoy = DateTime.now();
@@ -36,36 +41,68 @@ class _PacienteCreateViewState extends State<PacienteCreateView> {
     if (fecha != null) {
       setState(() {
         _cFecha.text = fecha.toIso8601String().split('T').first;
+        _errorFecha = null;
       });
     }
   }
 
   Future<void> _guardarPaciente() async {
-    if (_cNombre.text.trim().isEmpty || _cFecha.text.trim().isEmpty) {
-      _mostrarMensaje('Completa nombre y fecha');
-      return;
-    }
+    final nombre = _cNombre.text.trim();
+    final fechaTexto = _cFecha.text.trim();
+    final telefono = _cTelefono.text.trim();
+    final fechaNacimiento = DateTime.tryParse(fechaTexto);
+    final nombreValido = RegExp(r'^[A-Za-z]+(?: [A-Za-z]+)*$');
+    final hoy = DateTime.now();
+    final fechaMaxima = DateTime(hoy.year, hoy.month, hoy.day);
 
-    final fechaNacimiento = DateTime.tryParse(_cFecha.text.trim());
-    if (fechaNacimiento == null) {
-      _mostrarMensaje('La fecha debe tener el formato año-mes-día');
+    final errorNombre = !nombreValido.hasMatch(nombre)
+        ? 'Solo se permiten caracteres a-z.'
+        : null;
+    final errorFecha =
+        (fechaNacimiento == null || fechaNacimiento.isAfter(fechaMaxima))
+        ? 'Fecha inválida.'
+        : null;
+    final errorTelefono =
+        telefono.isNotEmpty && !RegExp(r'^\d+$').hasMatch(telefono)
+        ? 'Solo se permiten numeros.'
+        : null;
+
+    if (nombre.isEmpty ||
+        fechaTexto.isEmpty ||
+        errorNombre != null ||
+        errorFecha != null ||
+        errorTelefono != null) {
+      setState(() {
+        _errorNombre = errorNombre;
+        _errorFecha = errorFecha;
+        _errorTelefono = errorTelefono;
+      });
       return;
     }
 
     setState(() => _guardando = true);
 
     try {
-      await PacienteService().createPaciente(
-        nombre: _cNombre.text.trim(),
+      final pacienteCreado = await PacienteService().createPaciente(
+        nombre: nombre,
         sexo: _sexo,
-        fechaNacimiento: fechaNacimiento,
-        telefono: _cTelefono.text.trim().isEmpty
-            ? null
-            : _cTelefono.text.trim(),
+        fechaNacimiento: fechaNacimiento!,
+        telefono: telefono.isEmpty ? null : telefono,
       );
 
       if (!mounted) return;
-      Navigator.pop(context, true);
+      await DialogoExito.mostrar(
+        context,
+        titulo: 'Paciente creado',
+        mensaje: 'Paciente creado correctamente.',
+      );
+      if (!mounted) return;
+      Navigator.of(context).pushReplacement<bool, bool>(
+        MaterialPageRoute(
+          builder: (_) => PacienteDetalleView(paciente: pacienteCreado),
+        ),
+        result: true,
+      );
     } catch (error) {
       if (!mounted) return;
       setState(() => _guardando = false);
@@ -119,13 +156,20 @@ class _PacienteCreateViewState extends State<PacienteCreateView> {
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           const SizedBox(height: 8),
-          Input(etiqueta: 'Nombre', controlador: _cNombre, placeholder: 'Text'),
+          Input(
+            etiqueta: 'Nombre',
+            controlador: _cNombre,
+            placeholder: 'Ej. Marcelo',
+            mensajeError: _errorNombre,
+            alCambiar: (_) {
+              if (_errorNombre != null) setState(() => _errorNombre = null);
+            },
+          ),
           const SizedBox(height: 32),
-          const Text(
+          Text(
             'Sexo',
-            style: TextStyle(
-              color: Color(0xFF2E2E2E),
-              fontFamily: regular,
+            style: figmaCaption.copyWith(
+              color: const Color(0xFF2E2E2E),
               fontSize: 16,
               height: 24 / 16,
             ),
@@ -140,6 +184,7 @@ class _PacienteCreateViewState extends State<PacienteCreateView> {
             soloLectura: true,
             alTocar: _seleccionarFecha,
             iconoFinal: Icons.calendar_today_outlined,
+            mensajeError: _errorFecha,
           ),
           const SizedBox(height: 8),
           Input(
@@ -147,6 +192,12 @@ class _PacienteCreateViewState extends State<PacienteCreateView> {
             controlador: _cTelefono,
             placeholder: 'Telefono',
             tipoTeclado: TextInputType.phone,
+            mensajeError: _errorTelefono,
+            alCambiar: (_) {
+              if (_errorTelefono != null) {
+                setState(() => _errorTelefono = null);
+              }
+            },
           ),
           const SizedBox(height: 32),
           Center(
@@ -195,7 +246,7 @@ class _PacienteCreateViewState extends State<PacienteCreateView> {
         height: 22,
         child: Radio<String>(
           value: valor,
-          activeColor: const Color(0xFF616161),
+          activeColor: textoSecundario,
           materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
           visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
         ),
@@ -208,10 +259,8 @@ class _PacienteCreateViewState extends State<PacienteCreateView> {
       width: 88,
       child: Text(
         texto,
-        style: const TextStyle(
-          color: Color(0xFF2E2E2E),
-          fontFamily: regular,
-          fontSize: 14,
+        style: figmaCaption.copyWith(
+          color: const Color(0xFF2E2E2E),
           height: 16 / 14,
         ),
       ),
