@@ -186,7 +186,7 @@ class _EvaluacionCreateViewState extends State<EvaluacionCreateView> {
           const Text(
             'Observación',
             style: TextStyle(
-              color: Color(0xFF616161),
+              color: textoSecundario,
               fontFamily: regular,
               fontSize: 14,
               height: 20 / 14,
@@ -202,7 +202,7 @@ class _EvaluacionCreateViewState extends State<EvaluacionCreateView> {
               minLines: null,
               textAlignVertical: TextAlignVertical.top,
               style: const TextStyle(
-                color: Color(0xFF616161),
+                color: textoSecundario,
                 fontFamily: regular,
                 fontSize: 16,
                 height: 24 / 16,

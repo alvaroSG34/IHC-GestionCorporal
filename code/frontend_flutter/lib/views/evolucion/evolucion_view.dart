@@ -110,7 +110,7 @@ class _ContenidoEvolucion extends StatelessWidget {
           const SizedBox(height: 4),
           Text(
             'Resumen de progreso',
-            style: figmaCaption.copyWith(color: const Color(0xFF616161)),
+            style: figmaCaption.copyWith(color: textoSecundario),
           ),
           const SizedBox(height: 24),
           const Text('Resumen', style: _tituloSeccion),
@@ -179,7 +179,7 @@ class _FilaResumen extends StatelessWidget {
         Expanded(
           child: Text(
             metrica.etiqueta,
-            style: figmaCaption.copyWith(color: const Color(0xFF616161)),
+            style: figmaCaption.copyWith(color: textoSecundario),
           ),
         ),
         Text(
@@ -236,9 +236,7 @@ class _TarjetaMetrica extends StatelessWidget {
                     const SizedBox(height: 2),
                     Text(
                       'Ver gr\u00e1fico de evoluci\u00f3n',
-                      style: figmaCaption.copyWith(
-                        color: const Color(0xFF616161),
-                      ),
+                      style: figmaCaption.copyWith(color: textoSecundario),
                     ),
                   ],
                 ),
@@ -246,7 +244,7 @@ class _TarjetaMetrica extends StatelessWidget {
               const Text(
                 '\u203a',
                 style: TextStyle(
-                  color: Color(0xFF616161),
+                  color: textoSecundario,
                   fontFamily: regular,
                   fontSize: 24,
                 ),

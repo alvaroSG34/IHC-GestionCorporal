@@ -94,7 +94,7 @@ class EvaluacionDetalleView extends StatelessWidget {
           Text(
             'Evaluación ${evaluacion.nro_evaluacion} · ${_formatearFecha(evaluacion.fechaRegistro)}',
             style: const TextStyle(
-              color: Color(0xFF616161),
+              color: textoSecundario,
               fontFamily: regular,
               fontSize: 14,
               height: 24 / 14,
@@ -167,7 +167,7 @@ class EvaluacionDetalleView extends StatelessWidget {
             child: Text(
               etiqueta,
               style: const TextStyle(
-                color: Color(0xFF616161),
+                color: textoSecundario,
                 fontFamily: regular,
                 fontSize: 16,
                 height: 24 / 16,
@@ -203,7 +203,7 @@ class EvaluacionDetalleView extends StatelessWidget {
       child: Text(
         observacion?.isNotEmpty == true ? observacion! : 'Sin observaciones',
         style: const TextStyle(
-          color: Color(0xFF616161),
+          color: textoSecundario,
           fontFamily: regular,
           fontSize: 15,
           height: 24 / 15,

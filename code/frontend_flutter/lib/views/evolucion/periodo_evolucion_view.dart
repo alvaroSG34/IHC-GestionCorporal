@@ -122,9 +122,7 @@ class _PeriodoEvolucionViewState extends State<PeriodoEvolucionView> {
                     const SizedBox(height: 4),
                     Text(
                       '${widget.metrica.etiqueta} \u00b7 Selecciona el per\u00edodo',
-                      style: figmaCaption.copyWith(
-                        color: const Color(0xFF616161),
-                      ),
+                      style: figmaCaption.copyWith(color: textoSecundario),
                     ),
                     const SizedBox(height: 24),
                     const Text('Elegir per\u00edodo', style: _tituloPeriodo),
@@ -246,7 +244,7 @@ class _OpcionPeriodo extends StatelessWidget {
               Text(
                 seleccionada ? '\u25cf' : '\u25cb',
                 style: TextStyle(
-                  color: seleccionada ? primario : const Color(0xFF616161),
+                  color: seleccionada ? primario : textoSecundario,
                   fontSize: 18,
                 ),
               ),
@@ -289,7 +287,7 @@ class _SelectorFecha extends StatelessWidget {
               Text(
                 etiqueta,
                 style: const TextStyle(
-                  color: Color(0xFF616161),
+                  color: textoSecundario,
                   fontFamily: regular,
                   fontSize: 12,
                 ),

@@ -11,6 +11,7 @@ const Color dorado = Color.fromRGBO(255, 168, 0, 1);
 const Color background = Color(0xFFF7F1E9);
 const Color primario = Color(0xFF313A1D);
 const Color secundario = Color(0xFF212B13);
+const Color textoSecundario = Color(0xFF616161);
 const Color auxiliar = Color(0xFFDCEB56);
 const Color error = Color(0xFFFF0000);
 const Color aviso = Color(0xFFFFC300);
