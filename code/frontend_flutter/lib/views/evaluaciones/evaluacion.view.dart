@@ -119,7 +119,6 @@ class _EvaluacionViewState extends State<EvaluacionView> {
               height: 24 / 16,
             ),
           ),
-          const SizedBox(height: 23),
           Expanded(
             child: FutureBuilder<List<Evaluacion>>(
               future: _futuroEvaluaciones,
@@ -138,7 +137,8 @@ class _EvaluacionViewState extends State<EvaluacionView> {
                   );
                 }
 
-                final evaluaciones = estado.data ?? [];
+                final evaluaciones = [...(estado.data ?? [])]
+                  ..sort((a, b) => b.fechaRegistro.compareTo(a.fechaRegistro));
                 if (evaluaciones.isEmpty) {
                   return Center(
                     child: Text(
@@ -148,17 +148,29 @@ class _EvaluacionViewState extends State<EvaluacionView> {
                   );
                 }
 
+                final ultima = evaluaciones.first;
                 return ListView.separated(
-                  padding: EdgeInsets.zero,
-                  itemCount: evaluaciones.length,
-                  separatorBuilder: (_, _) => const SizedBox(height: 16),
-                  itemBuilder: (contexto, indice) => TarjetaEvaluacion(
-                    numero: '${evaluaciones[indice].nro_evaluacion}',
-                    texto: _formatearFechaHora(
-                      evaluaciones[indice].fechaRegistro,
-                    ),
-                    alTocar: () => _abrirDetalle(evaluaciones[indice]),
-                  ),
+                  padding: const EdgeInsets.only(top: 16, bottom: 24),
+                  itemCount: evaluaciones.length + 2,
+                  separatorBuilder: (_, indice) =>
+                      SizedBox(height: indice == 0 ? 16 : 5),
+                  itemBuilder: (contexto, indice) {
+                    if (indice == 0) {
+                      return _ResumenUltimaEvaluacion(
+                        fecha: _formatearFechaHora(ultima.fechaRegistro),
+                      );
+                    }
+                    if (indice == 1) {
+                      return _EncabezadoHistorial(total: evaluaciones.length);
+                    }
+
+                    final evaluacion = evaluaciones[indice - 2];
+                    return TarjetaEvaluacion(
+                      numero: '${evaluacion.nro_evaluacion}',
+                      texto: _formatearFechaHora(evaluacion.fechaRegistro),
+                      alTocar: () => _abrirDetalle(evaluacion),
+                    );
+                  },
                 );
               },
             ),
@@ -186,5 +198,114 @@ class _EvaluacionViewState extends State<EvaluacionView> {
     final hora = fecha.hour.toString().padLeft(2, '0');
     final minuto = fecha.minute.toString().padLeft(2, '0');
     return '${fecha.day} ${meses[fecha.month - 1]} ${fecha.year} $hora:$minuto';
+  }
+}
+
+class _ResumenUltimaEvaluacion extends StatelessWidget {
+  const _ResumenUltimaEvaluacion({required this.fecha});
+
+  final String fecha;
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      height: 104,
+      padding: const EdgeInsets.fromLTRB(16, 14, 16, 14),
+      decoration: BoxDecoration(
+        color: const Color(0xFFEDF0D1),
+        borderRadius: BorderRadius.circular(16),
+      ),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          const Text(
+            'Última evaluación',
+            style: TextStyle(
+              color: Color(0xFF2E2E2E),
+              fontFamily: semibold,
+              fontSize: 14,
+              height: 17 / 14,
+            ),
+          ),
+          const SizedBox(height: 8),
+          Row(
+            children: [
+              Expanded(
+                child: Text(
+                  fecha,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: figmaBody.copyWith(
+                    color: const Color(0xFF2E2E2E),
+                    fontSize: 22,
+                    height: 28 / 22,
+                  ),
+                ),
+              ),
+              const SizedBox(width: 8),
+              Container(
+                height: 32,
+                padding: const EdgeInsets.symmetric(horizontal: 12),
+                decoration: BoxDecoration(
+                  color: const Color(0xFFE0E8BA),
+                  borderRadius: BorderRadius.circular(18),
+                ),
+                child: const Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Text('●', style: TextStyle(color: primario, fontSize: 10)),
+                    SizedBox(width: 8),
+                    Text(
+                      'Seguimiento',
+                      style: TextStyle(
+                        color: Color(0xFF2E2E2E),
+                        fontSize: 13,
+                        height: 16 / 13,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+            ],
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _EncabezadoHistorial extends StatelessWidget {
+  const _EncabezadoHistorial({required this.total});
+
+  final int total;
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      height: 24,
+      child: Row(
+        children: [
+          const Expanded(
+            child: Text(
+              'Historial de evaluaciones',
+              style: TextStyle(
+                color: Color(0xFF2E2E2E),
+                fontFamily: semibold,
+                fontSize: 16,
+                height: 24 / 16,
+              ),
+            ),
+          ),
+          Text(
+            '$total ${total == 1 ? 'registro' : 'registros'}',
+            style: const TextStyle(
+              color: Color(0xFF666B63),
+              fontSize: 13,
+              height: 16 / 13,
+            ),
+          ),
+        ],
+      ),
+    );
   }
 }

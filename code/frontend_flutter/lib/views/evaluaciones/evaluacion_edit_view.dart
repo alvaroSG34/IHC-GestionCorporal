@@ -261,12 +261,11 @@ class _EvaluacionEditViewState extends State<EvaluacionEditView> {
             ),
           ),
           const SizedBox(height: 32),
-          Center(
-            child: BotonGuardar(
-              texto: 'Guardar cambios',
-              alPresionar: _guardando ? null : _guardarCambios,
-              estaCargando: _guardando,
-            ),
+          BotonGuardar(
+            texto: 'Guardar cambios',
+            anchoCompleto: true,
+            alPresionar: _guardando ? null : _guardarCambios,
+            estaCargando: _guardando,
           ),
           const SizedBox(height: 8),
           SizedBox(
