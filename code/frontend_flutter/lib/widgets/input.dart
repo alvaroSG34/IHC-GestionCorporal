@@ -72,7 +72,6 @@ class Input extends StatelessWidget {
             ),
             decoration: InputDecoration(
               hintText: placeholder,
-              suffixText: unidad,
               prefixIcon: iconoInicial == null
                   ? null
                   : Icon(
@@ -80,21 +79,43 @@ class Input extends StatelessWidget {
                       color: const Color(0xFF4F634A),
                       size: 20,
                     ),
-              suffixIcon: iconoFinal == null
+              suffixIcon: unidad == null && iconoFinal == null
                   ? null
-                  : Icon(iconoFinal, color: textoSecundario, size: 20),
+                  : Padding(
+                      padding: const EdgeInsets.only(left: 8, right: 12),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          if (unidad != null)
+                            Text(
+                              unidad!,
+                              style: figmaCaption.copyWith(
+                                color: textoSecundario,
+                                height: 24 / 14,
+                              ),
+                            ),
+                          if (unidad != null && iconoFinal != null)
+                            const SizedBox(width: 8),
+                          if (iconoFinal != null)
+                            Icon(iconoFinal, color: textoSecundario, size: 20),
+                        ],
+                      ),
+                    ),
+              suffixIconConstraints: const BoxConstraints(
+                minWidth: 48,
+                minHeight: 52,
+              ),
               hintStyle: figmaCaption.copyWith(
                 color: textoSecundario,
                 fontSize: 16,
               ),
-              suffixStyle: figmaCaption.copyWith(
-                color: textoSecundario,
-                height: 24 / 14,
-              ),
               isDense: true,
               filled: true,
               fillColor: superficie,
-              contentPadding: const EdgeInsets.symmetric(horizontal: 14),
+              contentPadding: const EdgeInsets.symmetric(
+                horizontal: 14,
+                vertical: 13,
+              ),
               enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(13),
                 borderSide: BorderSide(

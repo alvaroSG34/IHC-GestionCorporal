@@ -6,7 +6,6 @@ import '../../services/paciente_service.dart';
 import '../../widgets/boton_guardar.dart';
 import '../../widgets/dialogo_exito.dart';
 import '../../widgets/input.dart';
-import '../../widgets/top_app_bar.dart';
 import 'paciente_detalle_view.dart';
 
 class PacienteCreateView extends StatefulWidget {
@@ -64,7 +63,7 @@ class _PacienteCreateViewState extends State<PacienteCreateView> {
         : null;
     final errorTelefono =
         telefono.isNotEmpty && !RegExp(r'^\d+$').hasMatch(telefono)
-        ? 'Solo se permiten numeros.'
+        ? 'Solo se permiten números.'
         : null;
 
     if (nombre.isEmpty ||
@@ -137,10 +136,7 @@ class _PacienteCreateViewState extends State<PacienteCreateView> {
           clipBehavior: Clip.antiAlias,
           child: Column(
             children: [
-              TopAppBar(
-                titulo: 'Nuevo paciente',
-                alVolver: () => Navigator.pop(context),
-              ),
+              _encabezado(),
               Expanded(child: _formulario()),
             ],
           ),
@@ -149,63 +145,133 @@ class _PacienteCreateViewState extends State<PacienteCreateView> {
     );
   }
 
+  Widget _encabezado() {
+    return SizedBox(
+      height: 102,
+      child: Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 24),
+        child: Row(
+          children: [
+            Semantics(
+              button: true,
+              label: 'Volver',
+              child: InkWell(
+                onTap: () => Navigator.pop(context),
+                child: const SizedBox(
+                  width: 14,
+                  height: 62,
+                  child: Center(
+                    child: Text(
+                      '‹',
+                      style: TextStyle(
+                        color: secundario,
+                        fontFamily: regular,
+                        fontSize: 38,
+                        height: 1,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+            const SizedBox(width: 14),
+            const Expanded(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text('Nuevo paciente', style: _tituloPantalla),
+                  SizedBox(height: 2),
+                  Text(
+                    'Completa los datos para crear su perfil',
+                    style: _ayudaPantalla,
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   Widget _formulario() {
     return SingleChildScrollView(
-      padding: const EdgeInsets.symmetric(horizontal: 24),
+      padding: const EdgeInsets.fromLTRB(24, 6, 24, 18),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          const SizedBox(height: 8),
-          Input(
-            etiqueta: 'Nombre',
-            controlador: _cNombre,
-            placeholder: 'Ej. Marcelo',
-            mensajeError: _errorNombre,
-            alCambiar: (_) {
-              if (_errorNombre != null) setState(() => _errorNombre = null);
-            },
-          ),
-          const SizedBox(height: 32),
-          Text(
-            'Sexo',
-            style: figmaCaption.copyWith(
-              color: const Color(0xFF2E2E2E),
-              fontSize: 16,
-              height: 24 / 16,
+          Container(
+            padding: const EdgeInsets.all(18),
+            decoration: BoxDecoration(
+              color: superficie,
+              borderRadius: BorderRadius.circular(20),
+              boxShadow: const [
+                BoxShadow(
+                  color: Color.fromRGBO(46, 46, 31, 0.08),
+                  blurRadius: 16,
+                  offset: Offset(0, 5),
+                ),
+              ],
+            ),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Input(
+                  etiqueta: 'Nombre',
+                  controlador: _cNombre,
+                  placeholder: 'Ej. Marcelo',
+                  iconoInicial: Icons.person_outline,
+                  mensajeError: _errorNombre,
+                  alCambiar: (_) {
+                    if (_errorNombre != null) {
+                      setState(() => _errorNombre = null);
+                    }
+                  },
+                ),
+                const SizedBox(height: 8),
+                const Text('Sexo', style: _etiquetaFormulario),
+                const SizedBox(height: 8),
+                _campoSexo(),
+                const SizedBox(height: 8),
+                Input(
+                  etiqueta: 'Fecha Nacimiento',
+                  controlador: _cFecha,
+                  placeholder: 'Selecciona una fecha',
+                  soloLectura: true,
+                  alTocar: _seleccionarFecha,
+                  iconoInicial: Icons.person_outline,
+                  iconoFinal: Icons.calendar_today_outlined,
+                  mensajeError: _errorFecha,
+                ),
+                const SizedBox(height: 8),
+                Input(
+                  etiqueta: 'Telefono',
+                  controlador: _cTelefono,
+                  placeholder: 'Telefono',
+                  tipoTeclado: TextInputType.phone,
+                  iconoInicial: Icons.person_outline,
+                  mensajeError: _errorTelefono,
+                  alCambiar: (_) {
+                    if (_errorTelefono != null) {
+                      setState(() => _errorTelefono = null);
+                    }
+                  },
+                ),
+              ],
             ),
           ),
-          const SizedBox(height: 8),
-          _campoSexo(),
-          const SizedBox(height: 31),
-          Input(
-            etiqueta: 'Fecha de nacimiento',
-            controlador: _cFecha,
-            placeholder: 'Selecciona una fecha',
-            soloLectura: true,
-            alTocar: _seleccionarFecha,
-            iconoFinal: Icons.calendar_today_outlined,
-            mensajeError: _errorFecha,
-          ),
-          const SizedBox(height: 8),
-          Input(
-            etiqueta: 'Teléfono',
-            controlador: _cTelefono,
-            placeholder: 'Telefono',
-            tipoTeclado: TextInputType.phone,
-            mensajeError: _errorTelefono,
-            alCambiar: (_) {
-              if (_errorTelefono != null) {
-                setState(() => _errorTelefono = null);
-              }
-            },
-          ),
-          const SizedBox(height: 32),
-          Center(
-            child: BotonGuardar(
-              texto: 'Guardar',
-              alPresionar: _guardando ? null : _guardarPaciente,
-              estaCargando: _guardando,
-            ),
+          const SizedBox(height: 18),
+          BotonGuardar(
+            texto: 'Guardar paciente',
+            alPresionar: _guardando ? null : _guardarPaciente,
+            estaCargando: _guardando,
+            anchoCompleto: true,
+            colorFondo: const Color(0xFF303B1C),
+            colorTexto: superficie,
+            alto: 54,
+            radio: 16,
+            conSombra: true,
           ),
         ],
       ),
@@ -213,57 +279,88 @@ class _PacienteCreateViewState extends State<PacienteCreateView> {
   }
 
   Widget _campoSexo() {
-    return RadioGroup<String>(
-      groupValue: _sexo,
-      onChanged: (nuevoValor) {
-        if (nuevoValor != null) setState(() => _sexo = nuevoValor);
-      },
-      child: SizedBox(
-        height: 22,
-        child: Row(
-          children: [
-            const SizedBox(width: 54),
-            _opcionSexo(valor: 'M', etiqueta: 'Masculino'),
-            const SizedBox(width: 16),
-            _etiquetaSexo('Masculino'),
-            const SizedBox(width: 16),
-            _opcionSexo(valor: 'F', etiqueta: 'Femenino'),
-            const SizedBox(width: 16),
-            _etiquetaSexo('Femenino'),
-          ],
+    return Row(
+      children: [
+        Expanded(
+          child: _opcionSexo(valor: 'M', etiqueta: 'Masculino'),
         ),
-      ),
+        const SizedBox(width: 10),
+        Expanded(
+          child: _opcionSexo(valor: 'F', etiqueta: 'Femenino'),
+        ),
+      ],
     );
   }
 
   Widget _opcionSexo({required String valor, required String etiqueta}) {
+    final seleccionada = _sexo == valor;
     return Semantics(
       label: etiqueta,
       inMutuallyExclusiveGroup: true,
-      checked: _sexo == valor,
-      child: SizedBox(
-        width: 22,
-        height: 22,
-        child: Radio<String>(
-          value: valor,
-          activeColor: textoSecundario,
-          materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
-          visualDensity: const VisualDensity(horizontal: -4, vertical: -4),
-        ),
-      ),
-    );
-  }
-
-  Widget _etiquetaSexo(String texto) {
-    return SizedBox(
-      width: 88,
-      child: Text(
-        texto,
-        style: figmaCaption.copyWith(
-          color: const Color(0xFF2E2E2E),
-          height: 16 / 14,
+      checked: seleccionada,
+      child: Material(
+        color: seleccionada ? const Color(0xFF09E2FF) : const Color(0xFFFBF8F2),
+        borderRadius: BorderRadius.circular(13),
+        child: InkWell(
+          onTap: () => setState(() => _sexo = valor),
+          borderRadius: BorderRadius.circular(13),
+          child: Container(
+            height: 52,
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(13),
+              border: seleccionada
+                  ? null
+                  : Border.all(color: const Color(0xFFD6D1C7)),
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  seleccionada
+                      ? Icons.radio_button_checked
+                      : Icons.radio_button_unchecked,
+                  color: secundario,
+                  size: 20,
+                ),
+                const SizedBox(width: 8),
+                Text(etiqueta, style: _textoOpcionSexo),
+              ],
+            ),
+          ),
         ),
       ),
     );
   }
 }
+
+const _tituloPantalla = TextStyle(
+  color: secundario,
+  fontFamily: bold,
+  fontSize: 27,
+  fontWeight: FontWeight.w700,
+  height: 32 / 27,
+);
+
+const _ayudaPantalla = TextStyle(
+  color: Color(0xFF666B63),
+  fontFamily: regular,
+  fontSize: 15,
+  fontWeight: FontWeight.w400,
+  height: 19 / 15,
+);
+
+const _etiquetaFormulario = TextStyle(
+  color: secundario,
+  fontFamily: bold,
+  fontSize: 17,
+  fontWeight: FontWeight.w700,
+  height: 22 / 17,
+);
+
+const _textoOpcionSexo = TextStyle(
+  color: secundario,
+  fontFamily: medium,
+  fontSize: 15,
+  fontWeight: FontWeight.w500,
+  height: 20 / 15,
+);
