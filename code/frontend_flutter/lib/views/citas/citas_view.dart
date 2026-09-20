@@ -177,17 +177,18 @@ class TarjetaCita extends StatelessWidget {
                   Text(
                     fechaHoraCita(cita.fechaHora),
                     style: const TextStyle(
-                      color: Color(0xFF616161),
+                      color: textoSecundario,
                       fontSize: 12,
                       height: 1,
                     ),
                   ),
+                  const SizedBox(height: 4),
                   Text(
                     cita.tipoConsulta,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
                     style: const TextStyle(
-                      color: Color(0xFF616161),
+                      color: textoSecundario,
                       fontSize: 12,
                       height: 1,
                     ),
@@ -197,7 +198,7 @@ class TarjetaCita extends StatelessWidget {
             ),
             const Text(
               '›',
-              style: TextStyle(color: Color(0xFF616161), fontSize: 27),
+              style: TextStyle(color: textoSecundario, fontSize: 27),
             ),
           ],
         ),

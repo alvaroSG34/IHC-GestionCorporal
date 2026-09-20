@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../consts/colors.dart';
 import '../consts/styles.dart';
 
 class Input extends StatelessWidget {
@@ -14,6 +15,8 @@ class Input extends StatelessWidget {
     this.mensajeError,
     this.nodoFoco,
     this.alTocar,
+    this.alCambiar,
+    this.iconoInicial,
     this.iconoFinal,
     this.ocultarTexto = false,
   });
@@ -27,6 +30,8 @@ class Input extends StatelessWidget {
   final String? mensajeError;
   final FocusNode? nodoFoco;
   final VoidCallback? alTocar;
+  final ValueChanged<String>? alCambiar;
+  final IconData? iconoInicial;
   final IconData? iconoFinal;
   final bool ocultarTexto;
 
@@ -39,11 +44,16 @@ class Input extends StatelessWidget {
       children: [
         Text(
           etiqueta,
-          style: figmaBody.copyWith(color: const Color(0xFF2E2E2E)),
+          style: figmaButton.copyWith(
+            color: secundario,
+            fontFamily: bold,
+            fontSize: 17,
+            height: 22 / 17,
+          ),
         ),
-        const SizedBox(height: 8),
+        const SizedBox(height: 7),
         SizedBox(
-          height: 40,
+          height: 52,
           child: TextField(
             controller: controlador,
             focusNode: nodoFoco,
@@ -53,45 +63,48 @@ class Input extends StatelessWidget {
             enableSuggestions: !ocultarTexto,
             autocorrect: !ocultarTexto,
             onTap: alTocar,
-            style: const TextStyle(
-              color: Color(0xFF616161),
-              fontFamily: regular,
+            onChanged: alCambiar,
+            style: figmaCaption.copyWith(
+              color: primario,
+              fontFamily: semibold,
               fontSize: 16,
               height: 24 / 16,
             ),
             decoration: InputDecoration(
               hintText: placeholder,
               suffixText: unidad,
+              prefixIcon: iconoInicial == null
+                  ? null
+                  : Icon(
+                      iconoInicial,
+                      color: const Color(0xFF4F634A),
+                      size: 20,
+                    ),
               suffixIcon: iconoFinal == null
                   ? null
-                  : Icon(iconoFinal, color: const Color(0xFF616161), size: 20),
-              hintStyle: const TextStyle(
-                color: Color(0xFF616161),
-                fontFamily: regular,
+                  : Icon(iconoFinal, color: textoSecundario, size: 20),
+              hintStyle: figmaCaption.copyWith(
+                color: textoSecundario,
                 fontSize: 16,
               ),
-              suffixStyle: const TextStyle(
-                color: Color(0xFF616161),
-                fontFamily: regular,
-                fontSize: 14,
+              suffixStyle: figmaCaption.copyWith(
+                color: textoSecundario,
                 height: 24 / 14,
               ),
               isDense: true,
-              contentPadding: const EdgeInsets.all(8),
+              filled: true,
+              fillColor: superficie,
+              contentPadding: const EdgeInsets.symmetric(horizontal: 14),
               enabledBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.zero,
+                borderRadius: BorderRadius.circular(13),
                 borderSide: BorderSide(
-                  color: tieneError
-                      ? const Color(0xFFDC1A1D)
-                      : const Color(0xFF616161),
+                  color: tieneError ? const Color(0xFFDC1A1D) : bordeSuave,
                 ),
               ),
               focusedBorder: OutlineInputBorder(
-                borderRadius: BorderRadius.zero,
+                borderRadius: BorderRadius.circular(13),
                 borderSide: BorderSide(
-                  color: tieneError
-                      ? const Color(0xFFDC1A1D)
-                      : const Color(0xFF4C34D9),
+                  color: tieneError ? const Color(0xFFDC1A1D) : primario,
                 ),
               ),
             ),
@@ -101,9 +114,8 @@ class Input extends StatelessWidget {
           const SizedBox(height: 8),
           Text(
             mensajeError!,
-            style: const TextStyle(
-              color: Color(0xFFDC1A1D),
-              fontFamily: regular,
+            style: figmaCaption.copyWith(
+              color: const Color(0xFFDC1A1D),
               fontSize: 16,
               height: 24 / 16,
             ),

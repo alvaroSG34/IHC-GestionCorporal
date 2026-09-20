@@ -51,19 +51,19 @@ class DialogoConfirmacion extends StatelessWidget {
           children: [
             Text(
               titulo,
-              style: const TextStyle(
-                color: Color(0xFF2E2E2E),
+              style: figmaHeading.copyWith(
+                color: const Color(0xFF2E2E2E),
                 fontFamily: semibold,
                 fontSize: 20,
+                fontWeight: FontWeight.w600,
                 height: 28 / 20,
               ),
             ),
             const SizedBox(height: 16),
             Text(
               mensaje,
-              style: const TextStyle(
-                color: Color(0xFF2E2E2E),
-                fontFamily: regular,
+              style: figmaCaption.copyWith(
+                color: const Color(0xFF2E2E2E),
                 fontSize: 16,
                 height: 24 / 16,
               ),
@@ -118,11 +118,7 @@ class _AccionDialogo extends StatelessWidget {
       ),
       child: Text(
         texto,
-        style: const TextStyle(
-          fontFamily: regular,
-          fontSize: 16,
-          height: 24 / 16,
-        ),
+        style: figmaCaption.copyWith(fontSize: 16, height: 24 / 16),
       ),
     );
   }

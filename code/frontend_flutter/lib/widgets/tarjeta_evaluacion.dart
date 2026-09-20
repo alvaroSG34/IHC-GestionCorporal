@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 
+import '../consts/colors.dart';
 import '../consts/styles.dart';
 
 class TarjetaEvaluacion extends StatelessWidget {
@@ -17,11 +18,16 @@ class TarjetaEvaluacion extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: const Color(0xFFF0F0F0),
+      color: blanco,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+        side: const BorderSide(color: Color(0xFFE0E0E0)),
+      ),
       child: InkWell(
         onTap: alTocar,
+        borderRadius: BorderRadius.circular(12),
         child: SizedBox(
-          height: 72,
+          height: 64,
           child: Padding(
             padding: const EdgeInsets.all(16),
             child: Row(
@@ -37,7 +43,7 @@ class TarjetaEvaluacion extends StatelessWidget {
                   child: Text(
                     numero,
                     style: const TextStyle(
-                      color: Color(0xFF616161),
+                      color: textoSecundario,
                       fontFamily: regular,
                       fontSize: 16,
                       height: 24 / 16,
@@ -50,7 +56,11 @@ class TarjetaEvaluacion extends StatelessWidget {
                     texto,
                     maxLines: 1,
                     overflow: TextOverflow.ellipsis,
-                    style: figmaBody.copyWith(color: const Color(0xFF616161)),
+                    style: figmaBody.copyWith(
+                      color: textoSecundario,
+                      fontSize: 18,
+                      height: 22 / 18,
+                    ),
                   ),
                 ),
               ],

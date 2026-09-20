@@ -17,7 +17,7 @@ class BarraInferior extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       height: 58,
-      color: background,
+      color: superficie,
       child: Stack(
         children: [
           const Positioned(
@@ -33,16 +33,19 @@ class BarraInferior extends StatelessWidget {
               children: [
                 _ElementoNavegacion(
                   texto: 'Inicio',
+                  icono: '⌂',
                   seleccionado: indiceSeleccionado == 0,
                   alTocar: () => alCambiar(0),
                 ),
                 _ElementoNavegacion(
                   texto: 'Pacientes',
+                  icono: '●',
                   seleccionado: indiceSeleccionado == 1,
                   alTocar: () => alCambiar(1),
                 ),
                 _ElementoNavegacion(
                   texto: 'Citas',
+                  icono: '□',
                   seleccionado: indiceSeleccionado == 2,
                   alTocar: () => alCambiar(2),
                 ),
@@ -58,11 +61,13 @@ class BarraInferior extends StatelessWidget {
 class _ElementoNavegacion extends StatelessWidget {
   const _ElementoNavegacion({
     required this.texto,
+    required this.icono,
     required this.seleccionado,
     required this.alTocar,
   });
 
   final String texto;
+  final String icono;
   final bool seleccionado;
   final VoidCallback alTocar;
 
@@ -76,15 +81,15 @@ class _ElementoNavegacion extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Container(
-              width: 18,
-              height: 18,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: seleccionado ? auxiliar : const Color(0xFFE0E0E0),
+            Text(
+              icono,
+              style: figmaCaption.copyWith(
+                color: seleccionado ? auxiliar : const Color(0xFF8C8F8A),
+                fontSize: 20,
+                height: 23 / 20,
               ),
             ),
-            const SizedBox(height: 8),
+            const SizedBox(height: 2),
             Text(
               texto,
               maxLines: 1,
@@ -92,9 +97,8 @@ class _ElementoNavegacion extends StatelessWidget {
               overflow: TextOverflow.clip,
               textAlign: TextAlign.center,
               style: figmaCaption.copyWith(
-                color: seleccionado
-                    ? const Color(0xFF2E2E2E)
-                    : const Color(0xFF616161),
+                color: seleccionado ? const Color(0xFF2E2E2E) : textoSecundario,
+                fontFamily: seleccionado ? semibold : regular,
                 height: 16 / 14,
               ),
             ),

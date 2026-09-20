@@ -112,7 +112,7 @@ class _PantallaInicioState extends State<_PantallaInicio> {
                 Text(
                   _fechaActual(),
                   textAlign: TextAlign.center,
-                  style: figmaCaption.copyWith(color: const Color(0xFF616161)),
+                  style: figmaCaption.copyWith(color: textoSecundario),
                 ),
                 const SizedBox(height: 24),
                 const Text('Accesos r\u00e1pidos', style: _tituloSeccion),
@@ -160,7 +160,7 @@ class _PantallaInicioState extends State<_PantallaInicio> {
                         ),
                       ),
                       style: TextButton.styleFrom(
-                        foregroundColor: const Color(0xFF616161),
+                        foregroundColor: textoSecundario,
                         padding: const EdgeInsets.symmetric(horizontal: 4),
                         minimumSize: const Size(0, 32),
                         tapTargetSize: MaterialTapTargetSize.shrinkWrap,
@@ -188,7 +188,7 @@ class _PantallaInicioState extends State<_PantallaInicio> {
                         child: Text(
                           'No hay próximas consultas.',
                           style: TextStyle(
-                            color: Color(0xFF616161),
+                            color: textoSecundario,
                             fontFamily: regular,
                           ),
                         ),
@@ -360,9 +360,7 @@ class _TarjetaConsulta extends StatelessWidget {
                       cita.tipoConsulta,
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
-                      style: figmaCaption.copyWith(
-                        color: const Color(0xFF616161),
-                      ),
+                      style: figmaCaption.copyWith(color: textoSecundario),
                     ),
                   ],
                 ),
@@ -371,7 +369,7 @@ class _TarjetaConsulta extends StatelessWidget {
               const Text(
                 '›',
                 style: TextStyle(
-                  color: Color(0xFF616161),
+                  color: textoSecundario,
                   fontFamily: regular,
                   fontSize: 24,
                   height: 1,

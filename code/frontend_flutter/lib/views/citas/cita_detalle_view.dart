@@ -107,10 +107,7 @@ class _CitaDetalleViewState extends State<CitaDetalleView> {
                     children: [
                       const Text(
                         'Estado',
-                        style: TextStyle(
-                          color: Color(0xFF616161),
-                          fontSize: 13,
-                        ),
+                        style: TextStyle(color: textoSecundario, fontSize: 13),
                       ),
                       _estado(cita.estado),
                     ],
@@ -139,10 +136,7 @@ class _CitaDetalleViewState extends State<CitaDetalleView> {
                   cita.observacion?.isNotEmpty == true
                       ? cita.observacion!
                       : 'Sin observación.',
-                  style: const TextStyle(
-                    color: Color(0xFF616161),
-                    fontSize: 13,
-                  ),
+                  style: const TextStyle(color: textoSecundario, fontSize: 13),
                 ),
               ],
             ),
@@ -194,7 +188,7 @@ class _CitaDetalleViewState extends State<CitaDetalleView> {
       children: [
         Text(
           etiqueta,
-          style: const TextStyle(color: Color(0xFF616161), fontSize: 13),
+          style: const TextStyle(color: textoSecundario, fontSize: 13),
         ),
         Flexible(
           child: Text(
