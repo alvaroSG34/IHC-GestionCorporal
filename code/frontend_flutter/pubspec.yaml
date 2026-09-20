@@ -41,6 +41,9 @@ dependencies:
   http: ^1.6.0
   flutter_secure_storage: ^11.0.0
   fl_chart: ^0.69.0
+  flutter_svg: ^2.2.3
+  pdf: ^3.11.3
+  printing: ^5.14.2
 
 dev_dependencies:
   flutter_test:
@@ -68,6 +71,7 @@ flutter:
   assets:
     - assets/
     - assets/icons/icono_usuario_login.png
+    - assets/icons/dietas/
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

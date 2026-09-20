@@ -13,5 +13,7 @@ const Color primario = Color(0xFF313A1D);
 const Color secundario = Color(0xFF212B13);
 const Color textoSecundario = Color(0xFF616161);
 const Color auxiliar = Color(0xFFDCEB56);
+const Color superficie = Color(0xFFFFFDF9);
+const Color bordeSuave = Color(0xFFC2C2BA);
 const Color error = Color(0xFFFF0000);
 const Color aviso = Color(0xFFFFC300);
