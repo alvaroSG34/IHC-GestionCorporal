@@ -41,6 +41,22 @@ class EvaluacionService {
     }
   }
 
+  Future<List<Evaluacion>> getTodasEvaluaciones() async {
+    final response = await http.get(
+      Uri.parse('$baseUrl/evaluaciones/evaluaciones/'),
+      headers: await _encabezados(),
+    );
+
+    if (response.statusCode == 200) {
+      final List<dynamic> decoded = jsonDecode(response.body);
+      return decoded.map((json) => Evaluacion.fromJson(json)).toList();
+    }
+
+    throw Exception(
+      'Error al cargar evaluaciones: ${response.statusCode} - ${response.body}',
+    );
+  }
+
   Future<Evaluacion> createEvaluacion({
     required int paciente,
     required int altura,
