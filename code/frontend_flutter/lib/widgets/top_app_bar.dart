@@ -10,22 +10,35 @@ class TopAppBar extends StatelessWidget {
     this.alVolver,
     this.alAccion,
     this.textoAccion,
+    this.altura = 64,
+    this.tamanoTitulo,
+    this.diametroAccionCircular = 40,
+    this.elevacionAccionCircular = false,
   });
 
   final String? titulo;
   final VoidCallback? alVolver;
   final VoidCallback? alAccion;
   final String? textoAccion;
+  final double altura;
+  final double? tamanoTitulo;
+  final double diametroAccionCircular;
+  final bool elevacionAccionCircular;
 
   @override
   Widget build(BuildContext context) {
     final muestraVolver = alVolver != null;
     final muestraAccion = alAccion != null;
+    final usaAccionCircular = muestraAccion && textoAccion == null;
+    final altoAccion = usaAccionCircular ? diametroAccionCircular : 32.0;
 
     return SizedBox(
-      height: 64,
+      height: altura,
       child: Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+        padding: EdgeInsets.symmetric(
+          horizontal: 24,
+          vertical: (altura - altoAccion) / 2,
+        ),
         child: Row(
           children: [
             if (muestraVolver) ...[
@@ -44,7 +57,8 @@ class TopAppBar extends StatelessWidget {
                   titulo!,
                   style: figmaHeading.copyWith(
                     color: secundario,
-                    height: 32 / 24,
+                    fontSize: tamanoTitulo,
+                    height: tamanoTitulo == 28 ? 34 / 28 : 32 / 24,
                   ),
                 ),
               )
@@ -55,9 +69,13 @@ class TopAppBar extends StatelessWidget {
               _AccionCabecera(
                 etiquetaSemantica: textoAccion ?? 'Agregar',
                 simbolo: textoAccion ?? '+',
-                tamanoFuente: textoAccion == null ? 28 : 16,
+                tamanoFuente: textoAccion == null
+                    ? (diametroAccionCircular == 48 ? 34 : 28)
+                    : 16,
                 color: const Color(0xFF2E2E2E),
-                ancho: textoAccion == null ? 24 : 60,
+                ancho: textoAccion == null ? diametroAccionCircular : 60,
+                fondo: textoAccion == null ? auxiliar : null,
+                sombra: usaAccionCircular && elevacionAccionCircular,
                 alTocar: alAccion!,
               ),
             ],
@@ -75,6 +93,8 @@ class _AccionCabecera extends StatelessWidget {
     required this.tamanoFuente,
     required this.color,
     this.ancho = 24,
+    this.fondo,
+    this.sombra = false,
     required this.alTocar,
   });
 
@@ -83,6 +103,8 @@ class _AccionCabecera extends StatelessWidget {
   final double tamanoFuente;
   final Color color;
   final double ancho;
+  final Color? fondo;
+  final bool sombra;
   final VoidCallback alTocar;
 
   @override
@@ -92,14 +114,31 @@ class _AccionCabecera extends StatelessWidget {
       label: etiquetaSemantica,
       child: InkWell(
         onTap: alTocar,
-        child: SizedBox(
+        child: Container(
           width: ancho,
-          height: 32,
+          height: fondo == null ? 32 : ancho,
+          decoration: fondo == null
+              ? null
+              : BoxDecoration(
+                  color: fondo,
+                  shape: BoxShape.circle,
+                  boxShadow: sombra
+                      ? const [
+                          BoxShadow(
+                            color: Color.fromRGBO(48, 59, 28, 0.18),
+                            blurRadius: 10,
+                            offset: Offset(0, 4),
+                          ),
+                        ]
+                      : null,
+                ),
           child: Center(
             child: Text(
-              simbolo,
+              etiquetaSemantica == 'Volver'
+                  ? String.fromCharCode(0x2039)
+                  : simbolo,
               textAlign: TextAlign.center,
-              style: figmaCaption.copyWith(
+              style: TextStyle(
                 color: color,
                 fontSize: tamanoFuente,
                 height: 32 / tamanoFuente,
