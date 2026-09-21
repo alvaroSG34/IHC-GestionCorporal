@@ -8,7 +8,6 @@ import '../../models/dieta.dart';
 import '../../models/paciente.dart';
 import '../../services/dieta_service.dart';
 import '../../widgets/barra_inferior.dart';
-import '../../widgets/boton_guardar.dart';
 import '../../widgets/top_app_bar.dart';
 import '../home_view/home_view.dart';
 import 'detalle_desayuno_view.dart';
@@ -139,16 +138,6 @@ class _ComidasDiaViewState extends State<ComidasDiaView> {
           icono: 'assets/icons/dietas/cena.svg',
           comida: comidas.cena,
           tipoComida: 'cena',
-        ),
-        const Spacer(),
-        BotonGuardar(
-          texto: 'Guardar $nombreDia',
-          anchoCompleto: true,
-          alPresionar: () => ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(
-              content: Text('Comidas del $nombreDia guardadas localmente.'),
-            ),
-          ),
         ),
       ],
     ),

@@ -32,9 +32,11 @@ class _DietaViewState extends State<DietaView> {
     _futuroDieta = DietaService().getDietaActiva(widget.paciente.id);
   }
 
-  void _recargarDieta() => setState(
-    () => _futuroDieta = DietaService().getDietaActiva(widget.paciente.id),
-  );
+  void _recargarDieta() {
+    setState(() {
+      _futuroDieta = DietaService().getDietaActiva(widget.paciente.id);
+    });
+  }
 
   int get _edad {
     final hoy = DateTime.now();
@@ -158,20 +160,34 @@ class _DietaViewState extends State<DietaView> {
   );
 
   Future<void> _crearDieta() async {
-    final creada = await Navigator.push<bool>(
+    await Navigator.push<void>(
       context,
       MaterialPageRoute(
-        builder: (_) => NuevaDietaView(paciente: widget.paciente),
+        builder: (_) => NuevaDietaView(
+          paciente: widget.paciente,
+          alCrear: (dieta) {
+            if (!mounted) return;
+            setState(() {
+              _futuroDieta = Future.value(dieta);
+            });
+          },
+        ),
       ),
     );
-    if (creada == true && mounted) _recargarDieta();
+    if (mounted) _recargarDieta();
   }
 
   Future<void> _exportarPdf(Dieta dieta) async {
     setState(() => _exportandoPdf = true);
     try {
       const dias = [
-        'lunes', 'martes', 'miercoles', 'jueves', 'viernes', 'sabado', 'domingo',
+        'lunes',
+        'martes',
+        'miercoles',
+        'jueves',
+        'viernes',
+        'sabado',
+        'domingo',
       ];
       final planSemanal = await Future.wait(
         dias.map(

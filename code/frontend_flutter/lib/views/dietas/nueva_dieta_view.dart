@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../../consts/colors.dart';
 import '../../consts/styles.dart';
+import '../../models/dieta.dart';
 import '../../models/paciente.dart';
 import '../../services/dieta_service.dart';
 import '../../widgets/barra_inferior.dart';
@@ -15,9 +16,10 @@ import '../home_view/home_view.dart';
 /// El formulario funciona sólo de forma local mientras el backend de dietas no
 /// esté disponible.
 class NuevaDietaView extends StatefulWidget {
-  const NuevaDietaView({super.key, required this.paciente});
+  const NuevaDietaView({super.key, required this.paciente, this.alCrear});
 
   final Paciente paciente;
+  final ValueChanged<Dieta>? alCrear;
 
   @override
   State<NuevaDietaView> createState() => _NuevaDietaViewState();
@@ -110,14 +112,15 @@ class _NuevaDietaViewState extends State<NuevaDietaView> {
     }
     setState(() => _guardando = true);
     try {
-      await DietaService().crearDieta(
+      final dieta = await DietaService().crearDieta(
         pacienteId: widget.paciente.id,
         nombre: nombre,
         objetivo: objetivo,
         caloriasDiarias: calorias!,
         fechaInicio: _fecha,
       );
-      if (mounted) Navigator.pop(context, true);
+      widget.alCrear?.call(dieta);
+      if (mounted) Navigator.pop(context);
     } catch (error) {
       if (!mounted) return;
       setState(() => _guardando = false);

@@ -223,40 +223,49 @@ class _PlanComidasViewState extends State<PlanComidasView> {
 
   Widget _selectorDias() => SizedBox(
     height: 50,
-    child: SingleChildScrollView(
-      scrollDirection: Axis.horizontal,
-      child: Row(
-        children: List.generate(_dias.length, (indice) {
-          final seleccionado = indice == _diaSeleccionado;
-          return Padding(
-            padding: EdgeInsets.only(right: indice == _dias.length - 1 ? 0 : 8),
-            child: Semantics(
-              button: true,
-              selected: seleccionado,
-              label: _dias[indice],
-              child: Material(
-                color: seleccionado ? auxiliar : blanco,
-                borderRadius: BorderRadius.circular(10),
-                child: InkWell(
-                  onTap: () => setState(() => _diaSeleccionado = indice),
-                  borderRadius: BorderRadius.circular(10),
-                  child: Container(
-                    width: 50,
-                    height: 50,
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
+    child: LayoutBuilder(
+      builder: (context, restricciones) => SingleChildScrollView(
+        scrollDirection: Axis.horizontal,
+        child: ConstrainedBox(
+          constraints: BoxConstraints(minWidth: restricciones.maxWidth),
+          child: Row(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: List.generate(_dias.length, (indice) {
+              final seleccionado = indice == _diaSeleccionado;
+              return Padding(
+                padding: EdgeInsets.only(
+                  right: indice == _dias.length - 1 ? 0 : 8,
+                ),
+                child: Semantics(
+                  button: true,
+                  selected: seleccionado,
+                  label: _dias[indice],
+                  child: Material(
+                    color: seleccionado ? auxiliar : blanco,
+                    borderRadius: BorderRadius.circular(10),
+                    child: InkWell(
+                      onTap: () => setState(() => _diaSeleccionado = indice),
                       borderRadius: BorderRadius.circular(10),
-                      border: seleccionado
-                          ? null
-                          : Border.all(color: const Color(0xFFC7C7C2)),
+                      child: Container(
+                        width: 50,
+                        height: 50,
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10),
+                          border: seleccionado
+                              ? null
+                              : Border.all(color: const Color(0xFFC7C7C2)),
+                        ),
+                        child: Text(_dias[indice], style: _textoDia),
+                      ),
                     ),
-                    child: Text(_dias[indice], style: _textoDia),
                   ),
                 ),
-              ),
-            ),
-          );
-        }),
+              );
+            }),
+          ),
+        ),
       ),
     ),
   );
