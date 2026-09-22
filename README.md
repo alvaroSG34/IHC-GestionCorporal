@@ -8,7 +8,7 @@
 Software como servicio para la evaluación y seguimiento de la composición corporal humana.
 
 **Modalidad de implementacion**
-Proyecto propio - SIN IA
+Proyecto propio - CON IA
 
 **Problema Inicial**
 Cada vez cuando ocurre una consulta nutricional, el profesional primero debe buscar las evaluaciones anteriores que tuvo el paciente y luego registrar las nuevas medidas corporales. Ademas el paciente no tiene alguna forma de poder visualizar la evaluacion realizada por el profesional.
